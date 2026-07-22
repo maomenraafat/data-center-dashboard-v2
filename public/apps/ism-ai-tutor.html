@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ISM AI Tutor</title>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block" rel="stylesheet" />
+<style>
+  :root{
+    --primary:#152438; --secondary:#0058bc; --secondary-container:#0070eb;
+    --surface:#f6f9ff; --surface-container:#e8eef6; --on-surface:#161c22;
+    --on-surface-variant:#44474d; --outline-variant:#c4c6cd;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin:0; font-family:'Hanken Grotesk',sans-serif; background:var(--surface);
+    color:var(--on-surface); height:100vh; display:flex; flex-direction:column;
+  }
+  header{
+    background:var(--primary); color:#fff; padding:20px 28px;
+    display:flex; align-items:center; gap:12px;
+  }
+  header .material-symbols-outlined{ font-size:28px; color:var(--secondary-container); }
+  header h1{ font-size:20px; margin:0; letter-spacing:-0.01em; }
+  header p{ margin:2px 0 0; font-size:12px; font-family:'JetBrains Mono',monospace; opacity:.7; text-transform:uppercase; letter-spacing:.05em; }
+  main{
+    flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:48px; text-align:center; gap:16px;
+  }
+  .badge{
+    display:inline-flex; align-items:center; gap:8px; background:rgba(0,112,235,.1);
+    color:var(--secondary); padding:6px 14px; border-radius:999px; font-family:'JetBrains Mono',monospace;
+    font-size:12px; letter-spacing:.05em; text-transform:uppercase; font-weight:600;
+  }
+  h2{ font-size:32px; margin:0; max-width:520px; line-height:1.2; }
+  p.sub{ color:var(--on-surface-variant); max-width:440px; margin:0; }
+  .pulse{
+    width:64px; height:64px; border-radius:50%; background:var(--secondary-container);
+    display:flex; align-items:center; justify-content:center; color:#fff;
+    box-shadow:0 0 0 0 rgba(0,112,235,.5); animation:pulse 2s infinite;
+  }
+  @keyframes pulse{
+    0%{ box-shadow:0 0 0 0 rgba(0,112,235,.5); }
+    70%{ box-shadow:0 0 0 16px rgba(0,112,235,0); }
+    100%{ box-shadow:0 0 0 0 rgba(0,112,235,0); }
+  }
+  footer{
+    padding:14px 28px; border-top:1px solid var(--outline-variant); background:var(--surface-container);
+    font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--on-surface-variant);
+    display:flex; justify-content:space-between; text-transform:uppercase; letter-spacing:.05em;
+  }
+</style>
+</head>
+<body>
+  <header>
+    <span class="material-symbols-outlined">smart_toy</span>
+    <div>
+      <h1>ISM AI Tutor</h1>
+      <p>GPU-accelerated session // node CAI-01</p>
+    </div>
+  </header>
+  <main>
+    <div class="pulse">
+      <span class="material-symbols-outlined" style="font-size:32px;">psychology</span>
+    </div>
+    <span class="badge">GPU compute engaged</span>
+    <h2>Your AI tutor is warming up.</h2>
+    <p class="sub">This window is a placeholder — drop in the real ISM AI Tutor page here and it'll load inside this same window chrome, exactly like the Bloom page does.</p>
+  </main>
+  <footer>
+    <span>SESSION: DEMO-0001</span>
+    <span>STATUS: ACTIVE</span>
+  </footer>
+</body>
+</html>

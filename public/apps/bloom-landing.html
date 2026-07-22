@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en" style="">
+<head>
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Hanken+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=block" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script id="tailwind-config">try{
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-container": "#ff5f38",
+                        "on-secondary-fixed-variant": "#004396",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#aec6ff",
+                        "surface-container-highest": "#e7e2d9",
+                        "tertiary-container": "#d77890",
+                        "tertiary": "#96435a",
+                        "inverse-surface": "#32302a",
+                        "tertiary-fixed-dim": "#ffb1c2",
+                        "outline": "#8e7069",
+                        "error": "#ba1a1a",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#fff9f0",
+                        "secondary": "#0047AB",
+                        "on-tertiary-fixed-variant": "#792c43",
+                        "on-surface": "#1d1b16",
+                        "outline-variant": "#e3beb6",
+                        "surface": "#fff9f0",
+                        "background": "#fff9f0",
+                        "on-tertiary-container": "#58122a",
+                        "secondary-container": "#0047AB",
+                        "on-background": "#1d1b16",
+                        "on-primary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#dfd9d1",
+                        "on-tertiary": "#ffffff",
+                        "primary-fixed": "#ffdad2",
+                        "primary": "#b32a03",
+                        "on-tertiary-fixed": "#3f0019",
+                        "on-secondary-fixed": "#001a42",
+                        "on-primary-fixed": "#3c0700",
+                        "tertiary-fixed": "#ffd9e0",
+                        "secondary-fixed": "#d8e2ff",
+                        "on-primary-fixed-variant": "#8a1c00",
+                        "surface-variant": "#e7e2d9",
+                        "inverse-on-surface": "#f6f0e7",
+                        "on-secondary-container": "#ffffff",
+                        "inverse-primary": "#ffb4a2",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed-dim": "#ffb4a2",
+                        "on-primary-container": "#5c0f00",
+                        "surface-container-high": "#ede7df",
+                        "surface-container-low": "#f9f3ea",
+                        "surface-tint": "#b32a03",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container": "#f3ede4",
+                        "on-surface-variant": "#5a413a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "unit": "8px",
+                        "container-max": "1280px",
+                        "margin-desktop": "64px",
+                        "gutter": "24px",
+                        "margin-mobile": "16px",
+                        "stack-lg": "48px",
+                        "stack-md": "24px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Montserrat"],
+                        "label-mono": ["JetBrains Mono"],
+                        "body-md": ["Hanken Grotesk"],
+                        "body-lg": ["Hanken Grotesk"],
+                        "headline-xl": ["Montserrat"],
+                        "display-lg-mobile": ["Montserrat"],
+                        "display-lg": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "700"}],
+                        "label-mono": ["14px", {"lineHeight": "20px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-xl": ["40px", {"lineHeight": "48px", "fontWeight": "700"}],
+                        "display-lg-mobile": ["48px", {"lineHeight": "52px", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "display-lg": ["72px", {"lineHeight": "80px", "letterSpacing": "-0.02em", "fontWeight": "800"}]
+                    }
+                },
+            },
+        }
+    }catch(_e){}</script></head><body class="bg-surface text-on-surface font-body-md overflow-x-hidden">
+<!-- TopNavBar -->
+<nav class="bg-surface/80 backdrop-blur-md fixed top-0 left-0 right-0 z-50 flex justify-between items-center w-full px-margin-mobile md:px-margin-desktop py-4 max-w-container-max mx-auto glass-nav border-b border-outline-variant/20">
+<div class="flex items-center gap-2">
+<img alt="Bloom Logo" class="h-10 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB75zg6yGWAlAJJXpb0-pRUWTEoX0Y9RqpgDVccj3aqDnZVOItj9VLloRb3lSiOSyNtFtGXy3gH7AowPWWdpZcdE4a5NPhmLVz-H3M7enufLNZkMZe8vssfq03IypQ49cJ29thKjmBJKS3U0ajT_2DKXuU1E8nZHiMSTT1iZ_LfOAaE3o9x95azsDelUk4WjNm3-HcVHQvujb3Z8GRdKT1lWT2p-7T8uwx1QE23nbQPIgyjJCXU-jmG1bRP32V1yIUv8HuL9Q68W3g"/>
+</div>
+<div class="hidden md:flex items-center gap-8 font-body-md text-body-md font-bold">
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-300" href="#programs">Programs</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-300" href="#curriculum">Curriculum</a>
+<a class="text-on-surface-variant hover:text-secondary transition-colors duration-300" href="#mentors">Mentors</a>
+</div>
+<button class="bg-secondary text-white font-body-md px-6 py-2 rounded-xl font-bold scale-95 active:opacity-80 transition-all hover:shadow-lg hover:shadow-secondary/20">
+        Apply Now
+    </button>
+</nav>
+<!-- Hero Section -->
+<header class="relative pt-32 pb-stack-lg px-margin-mobile md:px-margin-desktop min-h-screen flex flex-col justify-center overflow-hidden">
+<!-- Decorative Floral Graphics -->
+<div class="absolute top-[10%] left-[-5%] text-primary-container/20 floating-spark">
+<svg height="300" viewbox="0 0 200 200" width="300" xmlns="http://www.w3.org/2000/svg">
+<path class="floral-shape" d="M100,0 C120,40 180,40 180,100 C180,160 120,160 100,200 C80,160 20,160 20,100 C20,40 80,40 100,0" fill="currentColor"></path>
+</svg>
+</div>
+<div class="absolute bottom-[5%] right-[-5%] text-tertiary-container/20 floating-spark" style="animation-delay: -2s;">
+<svg height="400" viewbox="0 0 200 200" width="400" xmlns="http://www.w3.org/2000/svg">
+<path class="floral-shape" d="M100,0 Q130,50 200,50 Q150,100 200,150 Q130,150 100,200 Q70,150 0,150 Q50,100 0,50 Q70,50 100,0" fill="currentColor"></path>
+</svg>
+</div>
+<div class="max-w-container-max mx-auto w-full grid grid-cols-1 md:grid-cols-2 gap-gutter items-center relative z-10">
+<div class="reveal-up active">
+<div class="inline-flex items-center gap-2 bg-secondary/10 text-secondary px-4 py-1 rounded-full mb-6 font-label-mono text-label-mono font-bold">
+<span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">auto_awesome</span>
+                APPLICATIONS OPEN FOR 2026
+            </div>
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg mb-6 leading-tight">
+                Bloom Your Career in <span class="text-secondary">Tech &amp; AI.</span>
+</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-lg mb-10">
+                A high-energy internship program designed for future software engineers and AI pioneers. Acceleration begins here.
+            </p>
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="bg-secondary text-white px-8 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-2 hover:scale-105 transition-transform shadow-xl shadow-secondary/20">
+                    Apply for Summer 2026
+                    <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<button class="border-2 border-outline text-on-surface px-8 py-4 rounded-xl font-bold text-lg hover:bg-surface-variant/50 transition-colors">
+                    View Curriculum
+                </button>
+</div>
+</div>
+<div class="relative reveal-up active" style="transition-delay: 200ms;">
+<div class="relative z-10 rounded-[48px] overflow-hidden shadow-2xl shadow-secondary/10 aspect-square flex items-center justify-center bg-surface-container-low/30 backdrop-blur-sm">
+<div class="w-full h-full flex items-center justify-center">
+  <img
+    src="bloom_logo_flower_only.png"
+    alt="Bloom Neural Flower"
+    class="bloom-flower w-3/4 h-3/4 object-contain"
+  />
+</div>
+    <!-- 3D Circuit Flower Animation Container -->
+<!-- <div id="threejs-container-ANIMATION_8" style="width:100%;height:100%;"></div>
+<script>
+                    (function() {
+                      const container = document.getElementById('threejs-container-ANIMATION_8');
+                      if (!container) return;
+
+                      const width = container.clientWidth || 600;
+                      const height = container.clientHeight || 600;
+
+                      const scene = new THREE.Scene();
+                      const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+                      camera.position.z = 5;
+
+                      const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+                      renderer.setSize(width, height);
+                      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                      container.appendChild(renderer.domElement);
+
+                      // Lights
+                      const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+                      scene.add(ambientLight);
+
+                      const spotLight = new THREE.SpotLight(0xffffff, 1);
+                      spotLight.position.set(5, 10, 5);
+                      scene.add(spotLight);
+
+                      const bloomBlue = new THREE.Color(0x0047ab);
+                      const bloomCoral = new THREE.Color(0xff5f38);
+
+                      const flowerGroup = new THREE.Group();
+                      scene.add(flowerGroup);
+
+                      // Function to create a "tech" petal with circuit-like points
+                      function createTechPetal() {
+                        const petalShape = new THREE.Shape();
+                        petalShape.moveTo(0, 0);
+                        petalShape.quadraticCurveTo(0.4, 0.2, 0.5, 0.8);
+                        petalShape.lineTo(0.6, 1.2);
+                        petalShape.quadraticCurveTo(0, 2.0, -0.6, 1.2);
+                        petalShape.lineTo(-0.5, 0.8);
+                        petalShape.quadraticCurveTo(-0.4, 0.2, 0, 0);
+
+                        const extrudeSettings = { depth: 0.05, bevelEnabled: true, bevelThickness: 0.02, bevelSize: 0.02, bevelSegments: 3 };
+                        const geometry = new THREE.ExtrudeGeometry(petalShape, extrudeSettings);
+
+                        const material = new THREE.MeshPhongMaterial({
+                          color: bloomCoral,
+                          shininess: 100,
+                          transparent: true,
+                          opacity: 0.9,
+                          side: THREE.DoubleSide
+                        });
+
+                        const mesh = new THREE.Mesh(geometry, material);
+
+                        const nodeGeom = new THREE.SphereGeometry(0.04, 8, 8);
+                        const nodeMat = new THREE.MeshPhongMaterial({ color: 0xffffff, emissive: 0xffffff });
+
+                        const nodePositions = [
+                          { x: 0.3, y: 0.7, z: 0.05 },
+                          { x: -0.3, y: 0.7, z: 0.05 },
+                          { x: 0, y: 1.3, z: 0.05 }
+                        ];
+
+                        nodePositions.forEach(pos => {
+                          const node = new THREE.Mesh(nodeGeom, nodeMat);
+                          node.position.set(pos.x, pos.y, pos.z);
+                          mesh.add(node);
+                        });
+
+                        return mesh;
+                      }
+
+                      const petals = [];
+                      const petalCount = 6;
+                      for (let i = 0; i < petalCount; i++) {
+                        const pivot = new THREE.Group();
+                        const petal = createTechPetal();
+                        const angle = (i / petalCount) * Math.PI * 2;
+                        pivot.rotation.z = angle;
+
+                        petal.rotation.x = Math.PI / 2.2;
+
+                        pivot.add(petal);
+                        flowerGroup.add(pivot);
+                        petals.push(petal);
+                      }
+
+                      const coreGeom = new THREE.IcosahedronGeometry(0.3, 1);
+                      const coreMat = new THREE.MeshPhongMaterial({ color: bloomBlue, wireframe: true });
+                      const core = new THREE.Mesh(coreGeom, coreMat);
+                      flowerGroup.add(core);
+
+                      let time = 0;
+                      function animate() {
+                        requestAnimationFrame(animate);
+                        time += 0.01;
+
+                        const bloomProgress = Math.sin(time * 0.5) * 0.5 + 0.5;
+                        petals.forEach((petal, i) => {
+                          petal.rotation.x = THREE.MathUtils.lerp(Math.PI / 2.2, Math.PI / 1.1, bloomProgress);
+                          const scale = 1 + Math.sin(time + i) * 0.05;
+                          petal.scale.set(scale, scale, scale);
+                        });
+
+                        core.rotation.y += 0.01;
+                        flowerGroup.rotation.y += 0.005;
+
+                        renderer.render(scene, camera);
+                      }
+
+                      window.addEventListener('resize', () => {
+                        const newWidth = container.clientWidth || window.innerWidth;
+                        const newHeight = container.clientHeight || window.innerHeight;
+                        camera.aspect = newWidth / newHeight;
+                        camera.updateProjectionMatrix();
+                        renderer.setSize(newWidth, newHeight);
+                      });
+
+                      animate();
+                    })();
+                </script>
+</div> -->
+<!-- Decorative Floaters -->
+<div class="absolute -top-6 -right-6 w-24 h-24 bg-primary-container rounded-full flex items-center justify-center floating-spark z-20">
+<span class="material-symbols-outlined text-white text-4xl">energy_savings_leaf</span>
+</div>
+<div class="absolute -bottom-10 -left-10 p-6 bg-white rounded-3xl shadow-xl z-20 hidden lg:block border border-outline-variant/30">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-full bg-secondary flex items-center justify-center text-white">
+<img alt="AI Neural Flower Icon" class="w-12 h-12 object-contain rounded-lg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAer-c5fRS0gwWxaWec4xEqs9BX9mWry2a09VrqhFZXCdQgHO2vbYIy09nFq0hNiYB3v1YdjDkF7P4BzWOI-mRGtt9Tuwu29yWBOebMDffkgrXK6D2m5EGWfcRn8X4vVjC9MY3ws2mU7eEJ4ns86taXg1-VWaWdQuM5ojK1pYbl1zTPM3hLzI5wKqWYqq8HANwAyDyjqDWdBrfZdxK9e2m0cTTTYl7tjH4_rADHK5Pot71JjIDOzwSwJHE4ceXSC3HjJ0u6Bz7rVp4"/>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Programs Section -->
+<section class="py-stack-lg px-margin-mobile md:px-margin-desktop bg-secondary" id="programs">
+<div class="max-w-container-max mx-auto">
+<div class="text-center mb-16 reveal-up">
+<h2 class="font-headline-xl text-headline-xl mb-4 text-white">Core Tracks</h2>
+<p class="text-white/80 font-body-lg max-w-2xl mx-auto">Focused paths designed to turn potential into mastery. Choose your specialization.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+<!-- AI Track -->
+<div class="bg-white p-12 rounded-[40px] shadow-sm hover:shadow-2xl transition-all border border-white/10 group reveal-up">
+<div class="w-16 h-16 bg-primary-fixed rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings: 'FILL' 1;">psychology</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg mb-6 text-secondary">Artificial Intelligence</h3>
+<p class="text-on-surface-variant mb-8 text-lg leading-relaxed">
+                    Master the foundations of LLMs, neural networks, and prompt engineering. Work on real-world generative AI projects and learn to deploy scalable models.
+                </p>
+<ul class="space-y-4 mb-10">
+<li class="flex items-center gap-3 text-on-surface font-medium">
+<span class="material-symbols-outlined text-primary-container">star_rate</span>
+                        Natural Language Processing
+                    </li>
+<li class="flex items-center gap-3 text-on-surface font-medium">
+<span class="material-symbols-outlined text-primary-container">star_rate</span>
+                        Computer Vision &amp; Models
+                    </li>
+<li class="flex items-center gap-3 text-on-surface font-medium">
+<span class="material-symbols-outlined text-primary-container">star_rate</span>
+                        AI Ethics &amp; Deployment
+                    </li>
+</ul>
+<button class="w-full py-4 rounded-xl border-2 border-secondary text-secondary font-bold hover:bg-secondary hover:text-white transition-all">Explore Track</button>
+</div>
+<!-- Software Dev Track -->
+<div class="bg-white p-12 rounded-[40px] shadow-sm hover:shadow-2xl transition-all border border-white/10 group reveal-up" style="transition-delay: 200ms;">
+<div class="w-16 h-16 bg-secondary-fixed rounded-2xl flex items-center justify-center mb-8 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-secondary text-4xl" style="font-variation-settings: 'FILL' 1;">terminal</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg mb-6 text-secondary">Software Development</h3>
+<p class="text-on-surface-variant mb-8 text-lg leading-relaxed">
+                    Build modern, robust applications. Focus on full-stack architecture, high-performance APIs, and user-centric design principles across the web.
+                </p>
+<ul class="space-y-4 mb-10">
+<li class="flex items-center gap-3 text-on-surface font-medium">
+<span class="material-symbols-outlined text-secondary">star_rate</span>
+                        React &amp; Next.js Architecture
+                    </li>
+<li class="flex items-center gap-3 text-on-surface font-medium">
+<span class="material-symbols-outlined text-secondary">star_rate</span>
+                        Scalable Backend Services
+                    </li>
+<li class="flex items-center gap-3 text-on-surface font-medium">
+<span class="material-symbols-outlined text-secondary">star_rate</span>
+                        Cloud Infrastructure (AWS/GCP)
+                    </li>
+</ul>
+<button class="w-full py-4 rounded-xl border-2 border-secondary text-secondary font-bold hover:bg-secondary hover:text-white transition-all">Explore Track</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Why Bloom Section -->
+<section class="py-stack-lg px-margin-mobile md:px-margin-desktop overflow-hidden">
+<div class="max-w-container-max mx-auto">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div class="order-2 lg:order-1 relative">
+<!-- Bento Grid for Visuals -->
+<div class="grid grid-cols-2 gap-4 relative">
+<!-- Flower background behind bento -->
+<div class="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-10 text-primary-container">
+<svg height="500" viewbox="0 0 200 200" width="500" xmlns="http://www.w3.org/2000/svg">
+<path class="floral-shape" d="M100,0 C120,40 180,40 180,100 C180,160 120,160 100,200 C80,160 20,160 20,100 C20,40 80,40 100,0" fill="currentColor"></path>
+</svg>
+</div>
+<div class="space-y-4">
+<div class="bg-tertiary-fixed h-64 rounded-3xl overflow-hidden shadow-lg reveal-up">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvaZBIsLaGQlc34CxvrmzRboMh_3j2EB-3NPa-63zjCMU2VQQOoHWKC9cPnTDOA-P8I0KXjU9AlLnKRLiaUU16pW1cdEn_XKY7h0u9MU_HOsO98cokyyGzv5g9TUMwI7Adr--dwyQlGrVKpXkzMFBEkwWWVGVLyQU59pGp7kb0wpSfGragVQy9xryxUJVAtARxp3KEBVT9PzjANdYFrUrQVyPbf8Znb5tR3toREtgpwgO1IbSJ2ftaXFINnIihAtfU2lqYRJAeBy8"/>
+</div>
+<div class="bg-primary-container p-8 rounded-3xl text-white flex flex-col justify-end h-48 reveal-up" style="transition-delay: 100ms;">
+<span class="material-symbols-outlined text-4xl mb-4">groups</span>
+<p class="font-bold text-2xl">Vibrant Community</p>
+</div>
+</div>
+<div class="space-y-4 pt-8">
+<div class="bg-secondary p-8 rounded-3xl text-white flex flex-col justify-end h-48 reveal-up" style="transition-delay: 200ms;">
+<span class="material-symbols-outlined text-4xl mb-4">psychology_alt</span>
+<p class="font-bold text-2xl">Elite Mentors</p>
+</div>
+<div class="bg-surface-container-highest h-64 rounded-3xl overflow-hidden shadow-lg reveal-up" style="transition-delay: 300ms;">
+<img class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAX5a83Q1pYZvIAWQQ7Rua8sxMTKNyZClOa7TYVLMyfdSu7kDfb65vg8Db3YuX6GY0alxVyOK0gtdpffmwDJJm5-tYZpUFxxReY7E-CGN0Q4hnXeaNUOHFEkWyq0rJuSvwNjTcBhRRz7LZrORIopIVuMUlGoa3_e5mHV2HocNGHUW31Mvcla69o3vd5AotORKprxbancKFoHmfSUORfIlvMCJwkrhQyLsJVX279rJVWLBpv1-PaoAFVWYiZAnXDmINNLAek3Vj2Z0w"/>
+</div>
+</div>
+</div>
+</div>
+<div class="order-1 lg:order-2 reveal-up">
+<h2 class="font-headline-xl text-headline-xl mb-8 leading-tight text-secondary">Why Bloom?</h2>
+<div class="space-y-10">
+<div class="flex gap-6">
+<div class="flex-shrink-0 w-12 h-12 bg-secondary/10 rounded-xl flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">emoji_objects</span>
+</div>
+<div>
+<h4 class="font-headline-lg text-[24px] mb-2 text-on-surface">Impact-First Projects</h4>
+<p class="text-on-surface-variant">Don't just fetch coffee. Build production features used by thousands of users across our global ecosystem.</p>
+</div>
+</div>
+<div class="flex gap-6">
+<div class="flex-shrink-0 w-12 h-12 bg-secondary/10 rounded-xl flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">partner_exchange</span>
+</div>
+<div>
+<h4 class="font-headline-lg text-[24px] mb-2 text-on-surface">Direct Mentorship</h4>
+<p class="text-on-surface-variant">Weekly 1:1s with Senior Engineers and AI researchers from top-tier tech companies.</p>
+</div>
+</div>
+<div class="flex gap-6">
+<div class="flex-shrink-0 w-12 h-12 bg-secondary/10 rounded-xl flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">rocket_launch</span>
+</div>
+<div>
+<h4 class="font-headline-lg text-[24px] mb-2 text-on-surface">Career Acceleration</h4>
+<p class="text-on-surface-variant">Resume workshops, mock interviews, and direct referral opportunities upon successful completion.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Experience By Numbers -->
+<section class="py-stack-lg px-margin-mobile md:px-margin-desktop bg-secondary text-on-primary rounded-[60px] mx-4 my-20 relative overflow-hidden">
+<!-- Decorative Floral Graphic -->
+<div class="absolute top-0 right-0 opacity-20 text-tertiary-fixed-dim pointer-events-none">
+<svg height="400" viewbox="0 0 200 200" width="400" xmlns="http://www.w3.org/2000/svg">
+<path class="floral-shape" d="M100,0 Q130,50 200,50 Q150,100 200,150 Q130,150 100,200 Q70,150 0,150 Q50,100 0,50 Q70,50 100,0" fill="currentColor"></path>
+</svg>
+</div>
+<div class="max-w-container-max mx-auto relative z-10">
+<div class="grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
+<div class="reveal-up">
+<div class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg mb-2 text-white">5+</div>
+<p class="font-label-mono uppercase tracking-widest text-secondary-fixed/80">Years Experience</p>
+</div>
+<div class="reveal-up" style="transition-delay: 100ms;">
+<div class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg mb-2 text-white">120+</div>
+<p class="font-label-mono uppercase tracking-widest text-secondary-fixed/80">Projects Completed</p>
+</div>
+<div class="reveal-up" style="transition-delay: 200ms;">
+<div class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg mb-2 text-white">80+</div>
+<p class="font-label-mono uppercase tracking-widest text-secondary-fixed/80">Happy Clients</p>
+</div>
+<div class="reveal-up" style="transition-delay: 300ms;">
+<div class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg mb-2 text-white">15</div>
+<p class="font-label-mono uppercase tracking-widest text-secondary-fixed/80">Industries Served</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Apply Now Section -->
+<section class="py-32 px-margin-mobile md:px-margin-desktop relative overflow-hidden bg-surface-bright">
+<div class="max-w-4xl mx-auto text-center relative z-10 reveal-up">
+<h2 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg mb-8 leading-tight text-secondary">
+            Let's Build <span class="italic font-light" style="font-family: serif;">Something Amazing!</span>
+</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant mb-12">
+            Join a cohort of brilliant minds. The Summer 2024 application window closes in:
+        </p>
+<!-- Countdown Placeholder -->
+<div class="flex justify-center gap-4 md:gap-8 mb-16">
+<div class="bg-white p-6 rounded-3xl shadow-lg border border-secondary/10 w-24 md:w-32">
+<div class="text-4xl md:text-5xl font-extrabold text-secondary mb-1">12</div>
+<div class="text-xs font-label-mono text-on-surface-variant">DAYS</div>
+</div>
+<div class="bg-white p-6 rounded-3xl shadow-lg border border-secondary/10 w-24 md:w-32">
+<div class="text-4xl md:text-5xl font-extrabold text-secondary mb-1">08</div>
+<div class="text-xs font-label-mono text-on-surface-variant">HOURS</div>
+</div>
+<div class="bg-white p-6 rounded-3xl shadow-lg border border-secondary/10 w-24 md:w-32">
+<div class="text-4xl md:text-5xl font-extrabold text-secondary mb-1">45</div>
+<div class="text-xs font-label-mono text-on-surface-variant">MINUTES</div>
+</div>
+</div>
+<div class="bg-secondary/5 p-12 rounded-[50px] border border-secondary/10">
+<h3 class="font-headline-lg text-headline-lg text-secondary mb-4">Ready to Bloom?</h3>
+<p class="text-on-surface-variant mb-10 max-w-lg mx-auto">Get notified about upcoming cohorts, technical workshops, and early-access application dates.</p>
+<div class="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto">
+<input class="flex-grow px-6 py-4 rounded-xl border border-outline-variant/30 focus:ring-2 focus:ring-secondary shadow-inner bg-white" placeholder="your@email.com" type="email"/>
+<button class="bg-secondary text-white px-8 py-4 rounded-xl font-bold hover:scale-105 transition-all shadow-lg shadow-secondary/20">Get in Touch</button>
+</div>
+</div>
+</div>
+<!-- Background Spark Decorations with Floral Twist -->
+<div class="absolute -top-10 -right-10 text-primary-container/10 select-none">
+<svg height="400" viewbox="0 0 200 200" width="400" xmlns="http://www.w3.org/2000/svg">
+<path class="floral-shape" d="M100,0 C120,40 180,40 180,100 C180,160 120,160 100,200 C80,160 20,160 20,100 C20,40 80,40 100,0" fill="currentColor"></path>
+</svg>
+</div>
+<div class="absolute -bottom-20 -left-20 text-secondary/10 select-none">
+<svg height="500" viewbox="0 0 200 200" width="500" xmlns="http://www.w3.org/2000/svg">
+<path class="floral-shape" d="M100,0 Q130,50 200,50 Q150,100 200,150 Q130,150 100,200 Q70,150 0,150 Q50,100 0,50 Q70,50 100,0" fill="currentColor"></path>
+</svg>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-surface-container-low dark:bg-surface-container-lowest w-full py-stack-lg mt-stack-lg">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto text-on-surface-variant">
+<div class="md:col-span-2">
+<div class="flex items-center gap-2 mb-6">
+<img alt="Bloom Logo" class="h-8 object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB75zg6yGWAlAJJXpb0-pRUWTEoX0Y9RqpgDVccj3aqDnZVOItj9VLloRb3lSiOSyNtFtGXy3gH7AowPWWdpZcdE4a5NPhmLVz-H3M7enufLNZkMZe8vssfq03IypQ49cJ29thKjmBJKS3U0ajT_2DKXuU1E8nZHiMSTT1iZ_LfOAaE3o9x95azsDelUk4WjNm3-HcVHQvujb3Z8GRdKT1lWT2p-7T8uwx1QE23nbQPIgyjJCXU-jmG1bRP32V1yIUv8HuL9Q68W3g"/>
+</div>
+<p class="max-w-sm mb-8 font-body-md text-body-md">Empowering the next generation of software engineers through immersive experiences and expert mentorship.</p>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full border border-outline flex items-center justify-center hover:bg-secondary hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">public</span>
+</a>
+<a class="w-10 h-10 rounded-full border border-outline flex items-center justify-center hover:bg-secondary hover:text-white transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">alternate_email</span>
+</a>
+</div>
+</div>
+<div class="">
+<h5 class="font-bold text-secondary mb-6 uppercase text-sm tracking-wider">Navigation</h5>
+<ul class="space-y-4 font-body-md text-body-md">
+<li class=""><a class="hover:text-secondary transition-all" href="#">Programs</a></li>
+<li class=""><a class="hover:text-secondary transition-all" href="#">Curriculum</a></li>
+<li class=""><a class="hover:text-secondary transition-all" href="#">Mentors</a></li>
+<li class=""><a class="font-bold text-secondary" href="#">Apply Now</a></li>
+</ul>
+</div>
+<div>
+<h5 class="font-bold text-on-surface mb-6 uppercase text-sm tracking-wider">Legal</h5>
+<ul class="space-y-4 font-body-md text-body-md">
+<li class=""><a class="hover:text-secondary transition-all" href="#">Privacy Policy</a></li>
+<li class=""><a class="hover:text-secondary transition-all" href="#">Terms of Service</a></li>
+<li class=""><a class="hover:text-secondary transition-all" href="#">Cookie Policy</a></li>
+</ul>
+</div>
+</div>
+<div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop mt-20 pt-10 border-t border-outline-variant/30 text-center">
+<p class="font-body-md text-body-md opacity-70">© 2024 Bloom Internship Program. All rights reserved.</p>
+</div>
+</footer>
+<script>
+    const observerOptions = {
+        threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal-up').forEach(el => observer.observe(el));
+</script>
+<style>
+    .bloom-flower {
+        animation: bloom-float 6s ease-in-out infinite, bloom-electrify 3s ease-in-out infinite;
+    }
+
+    @keyframes bloom-float {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50%      { transform: translateY(-14px) rotate(2deg); }
+    }
+
+    @keyframes bloom-electrify {
+        0%, 100% {
+            filter: drop-shadow(0 0 4px rgba(0,71,171,0.4)) drop-shadow(0 0 0px rgba(255,95,56,0));
+        }
+        50% {
+            filter: drop-shadow(0 0 22px rgba(0,71,171,0.9)) drop-shadow(0 0 14px rgba(255,95,56,0.7));
+        }
+    }
+    .reveal-up {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .reveal-up.active {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    .floating-spark {
+        animation: float 6s ease-in-out infinite;
+    }
+    @keyframes float {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-20px) rotate(5deg); }
+    }
+    .floral-shape {
+        transition: all 0.3s ease;
+    }
+</style>
+</body></html>
