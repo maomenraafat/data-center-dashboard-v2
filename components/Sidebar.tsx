@@ -23,9 +23,9 @@ const NAV_ITEMS: NavItem[] = [
 export default function Sidebar({ active }: { active: string }) {
   const [settingsOpen, setSettingsOpen] = useState(false);
   return (
-    <aside className="w-sidebar_width h-screen fixed left-0 top-0 border-r-4 border-outline-variant bg-primary flex flex-col py-margin px-gutter shadow-[inset_-4px_0_12px_rgba(0,0,0,0.5)] z-50 font-headline-md">
+    <aside className="w-sidebar_width h-screen fixed left-0 top-0 border-r-3 border-outline-variant bg-surface-container-low flex flex-col py-margin px-gutter shadow-[inset_-4px_0_12px_rgba(0,0,0,0.5)] z-50 font-headline-md">
       <div className="mb-margin">
-        <h1 className="font-display-lg text-display-lg text-secondary-container tracking-tighter leading-none mb-1 font-bold">
+        <h1 className="font-display-lg text-display-lg text-primary-container tracking-tighter leading-none mb-1 font-bold">
           BLOOM DC
         </h1>
       </div>
@@ -39,20 +39,20 @@ export default function Sidebar({ active }: { active: string }) {
               href={item.href}
               className={
                 isActive
-                  ? "bg-secondary-container text-on-secondary-container border-l-4 border-secondary-fixed-dim shadow-[0_0_8px_#0070eb] translate-x-1 transition-all flex items-center p-3 gap-unit"
-                  : "text-on-primary-container opacity-70 hover:opacity-100 flex items-center p-3 gap-unit hover:bg-primary-container transition-colors cursor-pointer group"
+                  ? "bg-primary-container text-on-primary border-l-4 border-primary-fixed shadow-[0_0_8px_#0070eb] translate-x-1 transition-all flex items-center p-3 gap-unit"
+                  : "text-on-surface-variant opacity-70 hover:opacity-100 flex items-center p-3 gap-unit hover:text-on-primary hover:bg-primary-container transition-colors cursor-pointer group"
               }
             >
               <span
                 className={`material-symbols-outlined ${
-                  isActive ? "text-secondary-fixed-dim" : "group-hover:text-secondary-fixed"
+                  isActive ? "text-on-primary" : "group-hover:text-on-primary"
                 }`}
               >
                 {item.icon}
               </span>
               <span className="text-base flex-grow font-headline-md">{item.label}</span>
               {isActive && (
-                <div className="w-2 h-2 rounded-full bg-[#10B981] shadow-[0_0_8px_#10B981] animate-pulse" />
+                <div className="w-2 h-2 rounded-full bg-on-primary shadow-[0_0_10px_rgba(0,229,255,0.8)] animate-pulse" />
               )}
               {item.badge && (
                 <span className="ml-auto bg-error px-1.5 py-0.5 text-[10px] rounded font-bold">

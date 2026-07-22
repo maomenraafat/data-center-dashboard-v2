@@ -44,7 +44,7 @@ export default function ComputeStatusBadge({
 }) {
   if (!isVisible) return null;
   return (
-    <div className="fixed top-4 right-4 z-[110] flex flex-col gap-2 items-end pointer-events-none">
+    <div className="fixed top-4 left-4 z-[110] flex flex-col gap-2 items-end pointer-events-none">
       <Pill label="CPU" active={cpuActive} activeText="In Use" idleText="Idle" />
       <Pill label="GPU" active={gpuActive} activeText="In Use" idleText="Idle" />
     </div>

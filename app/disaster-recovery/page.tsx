@@ -85,7 +85,7 @@ export default function DisasterRecoveryPage() {
   }[step];
 
   const toneCls: Record<string, string> = {
-    red: "border-error bg-error text-white hover:bg-error/90 shadow-[0_0_20px_rgba(186,26,26,0.4)]",
+    red: "border-red-500 bg-red-600 text-white hover:bg-red-700 shadow-[0_0_20px_rgba(239,68,68,0.5)]",
     amber: "border-amber-500 bg-amber-500 text-white hover:bg-amber-600 shadow-[0_0_20px_rgba(245,158,11,0.4)]",
     emerald: "border-emerald-500 bg-emerald-500 text-white hover:bg-emerald-600 shadow-[0_0_20px_rgba(16,185,129,0.35)]",
     neutral: "border-outline text-primary bg-surface-container hover:bg-primary-container",
@@ -137,7 +137,7 @@ export default function DisasterRecoveryPage() {
               <button
                 onClick={action.onClick}
                 disabled={action.disabled}
-                className={`shrink-0 flex items-center gap-2 px-6 py-4 rounded-lg border-2 font-bold text-sm uppercase tracking-widest transition-all active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100 ${toneCls[action.tone]}`}
+                className={`shrink-0 flex items-center gap-2 px-3 py-3 rounded-lg border-2 font-bold text-sm uppercase tracking-widest transition-all active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100 ${toneCls[action.tone]}`}
               >
                 <span className={`material-symbols-outlined text-xl ${action.spin ? "animate-spin" : ""}`}>
                   {action.icon}

@@ -2,7 +2,7 @@
 
 @theme {
   /* ---- Colors ---- */
-  --color-primary-fixed: #d4e3fe;
+  /* --color-primary-fixed: #d4e3fe;
   --color-surface-container-low: #eef4fc;
   --color-background: #f6f9ff;
   --color-on-error-container: #93000a;
@@ -48,7 +48,54 @@
   --color-on-error: #ffffff;
   --color-primary-fixed-dim: #b8c7e2;
   --color-secondary-fixed-dim: #adc6ff;
-  --color-surface-variant: #dde3eb;
+  --color-surface-variant: #dde3eb; */
+ --color-primary-fixed: #9cf0ff;
+  --color-surface-container-low: #0d1c2d;
+  --color-background: #0a1728;
+  --color-on-error-container: #ffdad6;
+  --color-secondary-container: #3f4758;
+  --color-surface-bright: #2c3a4c;
+  --color-on-tertiary-container: #4f5a6e;
+  --color-surface-tint: #00daf3;
+  --color-surface-container-lowest: #010f1f;
+  --color-secondary-fixed: #dbe2f8;
+  --color-tertiary-fixed: #d8e3fb;
+  --color-surface-dim: #051424;
+  --color-on-secondary-fixed: #141c2b;
+  --color-on-primary-container: #00626e;
+  --color-secondary: #bfc6db;
+  --color-inverse-on-surface: #233143;
+  --color-on-primary-fixed-variant: #004f58;
+  --color-on-surface-variant: #bac9cc;
+  --color-on-primary: #00363d;
+  --color-on-surface: #d4e4fa;
+  --color-surface-container: #122131;
+  --color-surface-container-high: #1c2b3c;
+  --color-on-background: #d4e4fa;
+  --color-surface-container-highest: #273647;
+  --color-on-primary-fixed: #001f24;
+  --color-primary-container: #00e5ff;
+  --color-on-tertiary: #263143;
+  --color-outline: #849396;
+  --color-outline-variant: #3b494c;
+  --color-tertiary-container: #c6d1e9;
+  --color-on-secondary-fixed-variant: #3f4758;
+  --color-tertiary-fixed-dim: #bcc7de;
+  --color-on-tertiary-fixed: #111c2d;
+  --color-on-secondary-container: #adb5c9;
+  --color-inverse-primary: #006875;
+  --color-error: #ffb4ab;
+  --color-tertiary: #e6edff;
+  --color-on-tertiary-fixed-variant: #3c475a;
+  --color-primary: #c3f5ff;
+  --color-on-secondary: #293041;
+  --color-surface: #051424;
+  --color-inverse-surface: #d4e4fa;
+  --color-error-container: #93000a;
+  --color-on-error: #690005;
+  --color-primary-fixed-dim: #00daf3;
+  --color-secondary-fixed-dim: #bfc6db;
+  --color-surface-variant: #273647;
 
   /* ---- Spacing (also drives w-/h-/p-/m-/gap-) ---- */
   --spacing-unit: 8px;
@@ -161,10 +208,83 @@
 /* ---- Load-balancing simulation ---- */
 
 /* NOC-style grid backdrop for the topology canvas. */
-.noc-grid {
+/* .noc-grid {
   background-color: #0b1a2c;
   background-image: linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 28px 28px;
+} */
+ .glass-card {
+  position: relative;
+  overflow: hidden;
+
+  background: linear-gradient(
+    180deg,
+    rgba(20, 34, 52, 0.92) 0%,
+    rgba(10, 23, 39, 0.96) 100%
+  );
+
+  backdrop-filter: blur(16px);
+
+  border: 1px solid rgba(0, 229, 255, 0.45);
+
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 229, 255, 0.08),
+    0 0 0 1px rgba(0, 229, 255, 0.10),
+    0 0 18px rgba(0, 229, 255, 0.12);
+}
+
+.glass-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+
+  background: linear-gradient(
+      135deg,
+      rgba(0,229,255,.85),
+      rgba(0,229,255,.15) 35%,
+      rgba(0,229,255,.15) 65%,
+      rgba(0,229,255,.85)
+  );
+
+  -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+}
+
+.site-badge {
+  background: rgba(0, 229, 255, 0.12);
+  color: #9cf0ff;
+  border: 1px solid rgba(0, 229, 255, 0.35);
+  border-radius: 4px;
+}
+
+.progress-track {
+  height: 8px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.bg-venting {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.05) 0 2px,
+    transparent 2px 10px
+  );
+}
+
+.noc-grid, .topology-grid {
+  background-color: #0a1728;
+  background-image:
+    linear-gradient(rgba(154,220,255,.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(154,220,255,.06) 1px, transparent 1px);
   background-size: 28px 28px;
 }
 
@@ -336,3 +456,4 @@ body {
   background: var(--color-background);
   color: var(--color-on-background);
 }
+

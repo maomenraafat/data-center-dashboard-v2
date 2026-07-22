@@ -21,7 +21,7 @@ export default function TrafficControlPage() {
 
   return (
     <div className="flex h-screen w-screen overflow-hidden">
-      <Sidebar active="Traffic Control" />
+      <Sidebar active="Load Balancing" />
 
       <main className="ml-sidebar_width h-screen overflow-hidden flex flex-col relative bg-surface-container-low flex-1">
         <header className="h-20 flex items-center px-gutter justify-between border-b border-outline-variant bg-surface">

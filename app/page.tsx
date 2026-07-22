@@ -14,8 +14,8 @@ export default function MainPage() {
     <div className="flex h-screen w-screen overflow-hidden">
       <Sidebar active="Main" />
 
-      <main className="flex-1 ml-sidebar_width flex flex-col h-full bg-surface-bright relative">
-        <header className="flex justify-between items-center px-gutter h-16 border-b border-outline-variant shadow-[0_1px_2px_rgba(0,0,0,0.1)] bg-surface-bright/80 backdrop-blur-md z-40">
+      <main className="flex-1 ml-sidebar_width flex flex-col h-full color-background relative">
+        <header className="flex justify-between items-center px-gutter h-16 border-b border-outline-variant shadow-[0_1px_2px_rgba(0,0,0,0.1)] color-background backdrop-blur-md z-40">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 text-primary font-bold">
               {/* <span className="material-symbols-outlined">terminal</span> */}
@@ -86,7 +86,7 @@ export default function MainPage() {
 
                           {/* Rack Status Cards */}
             <div className="col-span-12 grid grid-cols-1 md:grid-cols-2 gap-gutter">
-                           <NodeCard
+                <NodeCard
                 name="CAIRO"
                 serial="CAI-9900-DC"
                 subtitle="Central Regional Hub - Giza Data Park"
@@ -122,7 +122,7 @@ export default function MainPage() {
 
                         {/* Traffic Control Panel */}
               <section className="col-span-12 lg:col-span-4">
-                <div className="bg-surface-container-lowest border border-outline-variant p-gutter rounded recessed-panel">
+                <div className="bg-surface-container-lowest border border-outline-variant p-gutter rounded recessed-panel w-[500px]">
                   <TrafficControlPanel />
                 </div>
               </section>

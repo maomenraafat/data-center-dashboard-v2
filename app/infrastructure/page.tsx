@@ -30,13 +30,13 @@ export default function InfrastructurePage() {
       <Sidebar active="Infrastructure" />
       <ComputeStatusBadge cpuActive={bloomOpen} gpuActive={aiTutorOpen}   isVisible={bloomOpen || aiTutorOpen}/>
 
-      <main className="flex-1 ml-sidebar_width flex flex-col h-full bg-surface-bright relative">
-        <header className="flex justify-between items-center px-gutter h-16 border-b border-outline-variant shadow-[0_1px_2px_rgba(0,0,0,0.1)] bg-surface-bright/80 backdrop-blur-md z-40">
+      <main className="flex-1 ml-sidebar_width flex flex-col h-full bg-surface-bright/10 relative">
+        <header className="flex justify-between items-center px-gutter h-16 border-b border-outline-variant shadow-[0_1px_2px_rgba(0,0,0,0.1)] bg-surface backdrop-blur-md z-40">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 text-primary font-bold">
               {/* <span className="material-symbols-outlined">developer_board</span> */}
               {/* <span className="font-display-lg text-[20px] tracking-tight uppercase">CORE_OS v2.4</span> */}
-              <span className="font-display-lg text-[20px] tracking-tight uppercase">Level 2: CPU and GPU usage</span>
+              <span className="font-display-lg text-[25px] tracking-tight uppercase">Level 2: CPU and GPU usage</span>
 
             </div>
             <div className="h-4 w-px bg-outline-variant" />

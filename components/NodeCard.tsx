@@ -34,7 +34,7 @@ export default function NodeCard({
 
   return (
     <article
-      className={`bg-surface-container-high border border-outline-variant rounded p-gutter relative group overflow-hidden shadow-lg border-l-4 ${accentBorder}`}
+      className={` glass-card bg-surface-container-high border border-outline-variant rounded p-gutter relative group overflow-hidden shadow-lg border-l-4 ${accentBorder}`}
     >
       <div className="absolute top-2 right-4 font-code-sm text-[10px] text-on-surface-variant opacity-50 uppercase tracking-tighter font-data-label">
         SN: {serial}

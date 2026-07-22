@@ -23,7 +23,7 @@ export default function LockButton({ variant = "icon" }: { variant?: "icon" | "e
       <button
         type="button"
         onClick={handle}
-        className="w-full bg-error text-white font-bold py-3 mb-gutter text-sm tracking-widest active:translate-y-px transition-all shadow-[0_4px_0_#93000a] active:shadow-none uppercase font-headline-md"
+        className="w-full bg-red-700 text-white font-bold py-3 mb-gutter text-sm tracking-widest active:translate-y-px transition-all shadow-[0_4px_0_#93000a] active:shadow-none uppercase font-headline-md"
       >
         EMERGENCY SHUTDOWN
       </button>

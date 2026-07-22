@@ -49,7 +49,7 @@ export default function TopologyPage() {
         <div className="flex-grow flex p-gutter gap-gutter overflow-hidden">
           {/* Current mode display */}
           <section className="flex-[3] flex flex-col gap-gutter h-full">
-            <div className="flex-grow relative bg-white/50 rounded-lg border-2 border-outline-variant overflow-hidden flex items-center justify-center">
+            <div className="flex-grow relative topology-grid rounded-lg border-2 border-outline-variant overflow-hidden flex items-center justify-center">
               <div className="flex flex-col items-center gap-4">
                 <span className="material-symbols-outlined text-secondary text-[96px]">
                   {active?.icon ?? "hub"}
