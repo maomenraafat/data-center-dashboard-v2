@@ -90,7 +90,7 @@ export function AccessGate({ children }: { children: ReactNode }) {
       <div className="relative w-[420px] max-w-[92vw] bg-surface rounded-lg border-2 border-outline-variant shadow-2xl overflow-hidden">
         {/* Header */}
         <div className="px-gutter py-5 border-b border-outline-variant bg-surface-container text-center">
-          <h1 className="font-display-lg text-display-lg text-secondary-container tracking-tighter leading-none font-bold">
+          <h1 className="font-display-lg text-display-lg color-primary tracking-tighter leading-none font-bold">
             BLOOM DC
           </h1>
           <p className="font-code-sm text-on-surface-variant uppercase tracking-widest mt-1">
