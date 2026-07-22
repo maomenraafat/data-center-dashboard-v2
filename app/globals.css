@@ -154,6 +154,184 @@
   }
 }
 
+.led-glow-red {
+  box-shadow: 0 0 8px #ef4444, 0 0 2px #ef4444;
+}
+
+/* ---- Load-balancing simulation ---- */
+
+/* NOC-style grid backdrop for the topology canvas. */
+.noc-grid {
+  background-color: #0b1a2c;
+  background-image: linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* Animated packets flowing along a connector. Colour comes from `currentColor`,
+   so callers set the line colour with `color:` / a text-* class. Faster
+   animation-duration = heavier traffic. */
+@keyframes traffic-flow {
+  from {
+    background-position: center 0;
+  }
+  to {
+    background-position: center 12px;
+  }
+}
+.traffic-line {
+  background-image: repeating-linear-gradient(
+    180deg,
+    currentColor 0,
+    currentColor 4px,
+    transparent 4px,
+    transparent 12px
+  );
+  background-size: 100% 12px;
+  background-repeat: repeat-y;
+  animation: traffic-flow 0.6s linear infinite;
+}
+
+/* Hazard stripes for a downed server. */
+.hazard-stripes {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(239, 68, 68, 0.18) 0,
+    rgba(239, 68, 68, 0.18) 8px,
+    transparent 8px,
+    transparent 16px
+  );
+}
+
+@keyframes fade-rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-rise {
+  animation: fade-rise 0.4s ease both;
+}
+
+/* ---- Ransomware attack simulation ---- */
+
+/* Malicious packets streaming horizontally along the inter-DC link. Colour from
+   `currentColor`; faster duration = more aggressive spread. */
+@keyframes malware-stream {
+  from {
+    background-position: 0 center;
+  }
+  to {
+    background-position: 24px center;
+  }
+}
+.malware-stream {
+  background-image: repeating-linear-gradient(
+    90deg,
+    currentColor 0,
+    currentColor 7px,
+    transparent 7px,
+    transparent 18px
+  );
+  background-size: 24px 100%;
+  background-repeat: repeat-x;
+  animation: malware-stream 0.5s linear infinite;
+}
+
+/* Pulsing red danger vignette laid over the whole canvas during an attack. */
+@keyframes alert-vignette {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+.alert-vignette {
+  background: radial-gradient(ellipse at center, transparent 35%, rgba(186, 26, 26, 0.4) 100%);
+  animation: alert-vignette 1.8s ease-in-out infinite;
+}
+
+/* Encryption progress fill (drives width 0 -> 100 and holds). */
+@keyframes encrypt-fill {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+.encrypt-fill {
+  animation: encrypt-fill 3.5s cubic-bezier(0.4, 0, 0.6, 1) forwards;
+}
+
+/* Vertical scan line sweeping over a node while it is being encrypted. */
+@keyframes scan-sweep {
+  0% {
+    top: -20%;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  85% {
+    opacity: 1;
+  }
+  100% {
+    top: 120%;
+    opacity: 0;
+  }
+}
+.scan-sweep {
+  animation: scan-sweep 1.8s linear infinite;
+}
+
+/* Subtle glitch jitter for compromised labels / ransom title. */
+@keyframes glitch-shift {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  20% {
+    transform: translate(-1px, 1px);
+  }
+  40% {
+    transform: translate(1px, -1px);
+  }
+  60% {
+    transform: translate(-1px, 0);
+  }
+  80% {
+    transform: translate(1px, 1px);
+  }
+}
+.glitch {
+  animation: glitch-shift 0.28s steps(2) infinite;
+}
+
+/* Scanline texture that reads as "encrypted / corrupted" data. */
+.encrypted-texture {
+  background-image: repeating-linear-gradient(
+      0deg,
+      rgba(239, 68, 68, 0.12) 0,
+      rgba(239, 68, 68, 0.12) 1px,
+      transparent 1px,
+      transparent 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(168, 85, 247, 0.08) 0,
+      rgba(168, 85, 247, 0.08) 1px,
+      transparent 1px,
+      transparent 6px
+    );
+}
+
 body {
   background: var(--color-background);
   color: var(--color-on-background);

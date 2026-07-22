@@ -1,218 +1,95 @@
-// "use client";
-
-// import { useState } from "react";
-// import Sidebar from "@/components/Sidebar";
-// import RecoveryTerminal from "@/components/RecoveryTerminal";
-
-// export default function DisasterRecoveryPage() {
-//   const [recovered, setRecovered] = useState(false);
-
-//   return (
-//     <div className="flex h-screen w-screen overflow-hidden">
-//       <Sidebar active="Disaster Recovery" />
-
-//       <main className="ml-sidebar_width h-screen overflow-hidden flex flex-col relative bg-surface-container-low flex-1">
-//         <header className="h-20 flex items-center px-gutter justify-between border-b border-outline-variant bg-surface">
-//           <div className="flex items-center gap-4">
-//             <h2 className="font-headline-md text-headline-md uppercase tracking-tight text-primary">
-//               Level 1: Disaster Recovery - Power Failure
-//             </h2>
-//           </div>
-//           <div className="flex items-center gap-4 font-data-label text-data-label text-on-surface-variant">
-//             <span className="flex items-center gap-2">
-//               <div className="w-3 h-3 rounded-sm bg-error animate-blink" /> SIMULATION ACTIVE
-//             </span>
-//             <span className="border-l border-outline-variant pl-4" />
-//           </div>
-//         </header>
-
-//         <div className="flex-grow flex p-gutter gap-gutter overflow-hidden">
-//           {/* Central Content (Topology View) */}
-//           <section className="flex-[3] flex flex-col gap-gutter h-full">
-//             <div className="flex-grow relative bg-white/50 rounded-lg border-2 border-outline-variant overflow-hidden">
-//               <div className="absolute inset-0 p-margin pointer-events-none">
-//                 {/* Node ALX-01 */}
-//                 <div className="absolute top-[35%] left-[25%] pointer-events-auto cursor-pointer group">
-//                   <div
-//                     className={`border-2 p-3 rounded shadow-lg flex flex-col items-center gap-1 transition-all duration-500 ${
-//                       recovered
-//                         ? "border-outline-variant bg-surface-container-highest"
-//                         : "border-error bg-error-container"
-//                     }`}
-//                   >
-//                     <span
-//                       className={`material-symbols-outlined text-4xl ${
-//                         recovered ? "text-secondary" : "text-error animate-pulse"
-//                       }`}
-//                     >
-//                       {recovered ? "cloud_done" : "cloud_off"}
-//                     </span>
-//                     <span
-//                       className={`font-code-sm text-[10px] font-bold ${
-//                         recovered ? "text-primary-container" : "text-error"
-//                       }`}
-//                     >
-//                       {recovered ? "ALX-01: ACTIVE" : "ALX-01: FAULT"}
-//                     </span>
-//                     <div className="flex gap-1 mt-1">
-//                       <div
-//                         className={`w-1 h-1 rounded-full ${
-//                           recovered ? "bg-green-500 animate-pulse" : "bg-red-500 animate-blink"
-//                         }`}
-//                       />
-//                       <div
-//                         className={`w-1 h-1 rounded-full ${
-//                           recovered ? "bg-green-500" : "bg-red-500 animate-blink"
-//                         }`}
-//                       />
-//                     </div>
-//                   </div>
-//                 </div>
-
-//                 {/* Node CAI-01 */}
-//                 <div className="absolute top-[45%] left-[65%] pointer-events-auto cursor-pointer group">
-//                   <div className="border-2 border-outline-variant bg-surface-container-highest p-3 rounded shadow-lg flex flex-col items-center gap-1 group-hover:border-secondary transition-all">
-//                     <span className="material-symbols-outlined text-secondary text-4xl">cloud_done</span>
-//                     <span className="font-code-sm text-[10px] text-primary-container">CAI-01: ACTIVE</span>
-//                     <div className="flex gap-1 mt-1">
-//                       <div className="w-1 h-1 bg-green-500 rounded-full animate-pulse" />
-//                       <div className="w-1 h-1 bg-green-500 rounded-full" />
-//                     </div>
-//                   </div>
-//                 </div>
-//               </div>
-
-//               <div className="absolute top-4 right-4 text-right">
-//                 <p className="font-code-sm text-xs text-on-surface-variant">SERIAL: BDC-DR-ALX-CAI</p>
-//                 <p className="font-code-sm text-[10px] text-on-surface-variant opacity-60">
-//                   REGIONAL FAILOVER LAYER: ACTIVE
-//                 </p>
-//               </div>
-//             </div>
-
-//             {/* Bottom Control Panel */}
-//             <div className="h-32 bg-surface-container-high border-t border-outline-variant p-gutter flex items-center justify-center gap-margin shadow-inner">
-//               <ControlButton label="Engage Power" icon="play_arrow" text="START" colorClass="border-secondary text-secondary hover:bg-secondary-container" />
-//               <ControlButton label="Abort Sequence" icon="stop" text="STOP" colorClass="border-error text-error hover:bg-error" />
-//               <ControlButton label="Hard Cycle" icon="refresh" text="REBOOT" colorClass="border-outline text-primary hover:bg-primary-container" />
-//               <ControlButton label="Contain Fault" icon="lock" text="ISOLATE" colorClass="border-tertiary text-tertiary hover:bg-tertiary-container" />
-//             </div>
-//           </section>
-
-//           {/* Sidebar Content */}
-//           <section className="flex-1 flex flex-col gap-gutter h-full">
-//             {/* Progress Module */}
-//             <div className="bg-surface rounded-lg border border-outline-variant p-4 flex flex-col gap-4">
-//               <div className="flex justify-between items-center border-b border-outline-variant pb-2">
-//                 <h3 className="font-headline-md text-base text-primary uppercase">Scenario Tasks</h3>
-//                 <span className="font-code-sm text-xs text-on-surface-variant">
-//                   {recovered ? "02 / 03" : "01 / 03"}
-//                 </span>
-//               </div>
-//               <div className="space-y-3">
-//                 <div
-//                   className={`flex items-center gap-3 p-3 rounded transition-all border ${
-//                     recovered
-//                       ? "bg-green-50 border-green-200"
-//                       : "bg-amber-50 border-amber-200 animate-pulse"
-//                   }`}
-//                 >
-//                   <span className={`material-symbols-outlined ${recovered ? "text-green-600" : "text-amber-600"}`}>
-//                     {recovered ? "check_circle" : "radio_button_checked"}
-//                   </span>
-//                   <div className="flex-grow">
-//                     <p className={`text-sm font-headline-md ${recovered ? "text-green-800" : "text-amber-800"}`}>
-//                       Task 1: Isolate ALX-01 Fault
-//                     </p>
-//                     <p className={`font-code-sm text-[10px] ${recovered ? "text-green-600" : "text-amber-600"}`}>
-//                       {recovered ? "COMPLETED" : "IN PROGRESS..."}
-//                     </p>
-//                   </div>
-//                 </div>
-
-//                 <div className="flex items-center gap-3 p-3 bg-surface-container opacity-50 rounded">
-//                   <span className="material-symbols-outlined">radio_button_unchecked</span>
-//                   <div className="flex-grow">
-//                     <p className="text-sm text-on-surface-variant font-headline-md">Task 2: Shift Load to CAI-01</p>
-//                     <p className="font-code-sm text-[10px]">LOCKED</p>
-//                   </div>
-//                 </div>
-
-//                 <div className="flex items-center gap-3 p-3 bg-surface-container opacity-50 rounded">
-//                   <span className="material-symbols-outlined">radio_button_unchecked</span>
-//                   <div className="flex-grow">
-//                     <p className="text-sm text-on-surface-variant font-headline-md">
-//                       Task 3: Initiate Sequence RECOVER
-//                     </p>
-//                     <p className="font-code-sm text-[10px]">LOCKED</p>
-//                   </div>
-//                 </div>
-//               </div>
-//             </div>
-
-//             {/* Terminal Module */}
-//             <RecoveryTerminal onRecovered={() => setRecovered(true)} />
-//           </section>
-//         </div>
-//       </main>
-//     </div>
-//   );
-// }
-
-// function ControlButton({
-//   label,
-//   icon,
-//   text,
-//   colorClass,
-// }: {
-//   label: string;
-//   icon: string;
-//   text: string;
-//   colorClass: string;
-// }) {
-//   return (
-//     <div className="flex flex-col items-center gap-3 font-headline-md">
-//       <span className="font-data-label text-[11px] uppercase tracking-widest text-on-surface-variant opacity-70">
-//         {label}
-//       </span>
-//       <button
-//         className={`w-32 h-12 bg-surface-container border-b-2 flex items-center justify-center gap-2 hover:text-white transition-colors rounded-sm ${colorClass}`}
-//       >
-//         <span className="material-symbols-outlined text-xl">{icon}</span>
-//         <span className="text-xs font-bold tracking-widest">{text}</span>
-//       </button>
-//     </div>
-//   );
-// }
-
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Sidebar from "@/components/Sidebar";
 import RecoveryTerminal from "@/components/RecoveryTerminal";
+import RansomwareSim, { type ScenarioStep } from "@/components/RansomwareSim";
 import { useControl } from "@/hooks/useControl";
 
-type Phase = "idle" | "disaster" | "recovered";
+const STEP_ORDER: ScenarioStep[] = ["stable", "breach", "contained", "failover", "restored"];
+
+const STEP_SCRIPT: Record<ScenarioStep, string> = {
+  stable:
+    "Two datacenters — Cairo and Alexandria — each holding a live copy of the data, replicating to each other constantly. It's Friday afternoon. Everything's green.",
+  breach:
+    "Weeks ago, someone in Alexandria opened the wrong attachment. The attackers waited, mapped the network, and just now pulled the trigger. Alexandria is encrypting itself. The trap: the replication link is about to copy the damage to Cairo — our last good copy.",
+  contained:
+    "The first move isn't to fix Alexandria — it's to cut it off. We sever the link and quarantine the node. The spread stops right here. This is the whole game.",
+  failover:
+    "With Alexandria dark, Cairo takes all the traffic. Load climbs, but the service stays up. Customers barely notice.",
+  restored:
+    "We don't pay, and we don't trust the infected disks. We wipe Alexandria and rebuild from a clean backup taken before the attack, then re-sync from Cairo. Both regions green again. The order is always contain → failover → restore — never the other way around.",
+};
 
 export default function DisasterRecoveryPage() {
-  const [phase, setPhase] = useState<Phase>("idle");
+  const [step, setStep] = useState<ScenarioStep>("stable");
   const { send } = useControl();
 
-  const disasterActive = phase !== "idle";
-  const recovered = phase === "recovered";
+  const contained = step === "contained" || step === "failover" || step === "restored";
+  const failedOver = step === "failover" || step === "restored";
+  const restored = step === "restored";
+  const active = step !== "stable";
 
-  function triggerDisaster() {
-    if (phase !== "idle") return;
-    setPhase("disaster");
+  // --- scenario transitions (ESP calls preserved from the original page) ----
+  function triggerAttack() {
+    if (step !== "stable") return;
+    setStep("breach");
     // Disaster recovery → /disasterrecovery?disasterrecovery=2 (engage failover).
     void send("disasterrecovery", 2);
   }
-
-  function reboot() {
-    setPhase("idle");
+  function isolate() {
+    if (step !== "breach") return;
+    setStep("contained");
+  }
+  function restore() {
+    if (step !== "failover") return;
+    setStep("restored");
     // Restore to normal operation → /disasterrecovery?disasterrecovery=1.
     void send("disasterrecovery", 1);
   }
+  function resetScenario() {
+    setStep("stable");
+    void send("disasterrecovery", 1);
+  }
+
+  // Containment automatically triggers failover a beat later ("failover happens
+  // automatically" in the narration).
+  useEffect(() => {
+    if (step !== "contained") return;
+    const t = setTimeout(() => setStep("failover"), 2200);
+    return () => clearTimeout(t);
+  }, [step]);
+
+  const statusPill: Record<ScenarioStep, { cls: string; text: string }> = {
+    stable: { cls: "bg-green-500", text: "SYSTEM NOMINAL" },
+    breach: { cls: "bg-error animate-blink", text: "BREACH — ENCRYPTING" },
+    contained: { cls: "bg-amber-500 animate-pulse", text: "CONTAINED" },
+    failover: { cls: "bg-secondary animate-pulse", text: "FAILOVER ACTIVE" },
+    restored: { cls: "bg-green-500", text: "RECOVERED" },
+  };
+  const pill = statusPill[step];
+
+  const action: {
+    label: string;
+    icon: string;
+    onClick?: () => void;
+    tone: string;
+    disabled?: boolean;
+    spin?: boolean;
+  } = {
+    stable: { label: "Trigger Ransomware", icon: "coronavirus", onClick: triggerAttack, tone: "red" },
+    breach: { label: "Isolate ALX-01", icon: "link_off", onClick: isolate, tone: "amber" },
+    contained: { label: "Failing over…", icon: "sync", tone: "neutral", disabled: true, spin: true },
+    failover: { label: "Restore from Backup", icon: "restore", onClick: restore, tone: "emerald" },
+    restored: { label: "Reset Scenario", icon: "restart_alt", onClick: resetScenario, tone: "neutral" },
+  }[step];
+
+  const toneCls: Record<string, string> = {
+    red: "border-error bg-error text-white hover:bg-error/90 shadow-[0_0_20px_rgba(186,26,26,0.4)]",
+    amber: "border-amber-500 bg-amber-500 text-white hover:bg-amber-600 shadow-[0_0_20px_rgba(245,158,11,0.4)]",
+    emerald: "border-emerald-500 bg-emerald-500 text-white hover:bg-emerald-600 shadow-[0_0_20px_rgba(16,185,129,0.35)]",
+    neutral: "border-outline text-primary bg-surface-container hover:bg-primary-container",
+  };
 
   return (
     <div className="flex h-screen w-screen overflow-hidden">
@@ -222,188 +99,94 @@ export default function DisasterRecoveryPage() {
         <header className="h-20 flex items-center px-gutter justify-between border-b border-outline-variant bg-surface">
           <div className="flex items-center gap-4">
             <h2 className="font-headline-md text-headline-md uppercase tracking-tight text-primary">
-              Level 1: Disaster Recovery - Power Failure
+              Disaster Recovery — Ransomware Containment Drill
             </h2>
           </div>
           <div className="flex items-center gap-4 font-data-label text-data-label text-on-surface-variant">
             <span className="flex items-center gap-2">
-              <div
-                className={`w-3 h-3 rounded-sm ${
-                  disasterActive ? "bg-error animate-blink" : "bg-green-500"
-                }`}
-              />
-              {disasterActive ? "SIMULATION ACTIVE" : "SYSTEM NOMINAL"}
+              <div className={`w-3 h-3 rounded-sm ${pill.cls}`} />
+              {pill.text}
             </span>
             <span className="border-l border-outline-variant pl-4" />
-            {/* <button
-              onClick={triggerDisaster}
-              disabled={disasterActive}
-              className="flex items-center gap-2 px-4 py-2 rounded-md border-2 border-error text-error font-bold text-xs uppercase tracking-widest hover:bg-error hover:text-white transition-colors disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-error disabled:cursor-not-allowed"
-            >
-              <span className="material-symbols-outlined text-lg">bolt</span>
-              Trigger Disaster
-            </button> */}
           </div>
         </header>
 
         <div className="flex-grow flex p-gutter gap-gutter overflow-hidden">
           {/* Central Content (Topology View) */}
-          <section className="flex-[3] flex flex-col gap-gutter h-full">
-            <div className="flex-grow relative bg-white/50 rounded-lg border-2 border-outline-variant overflow-hidden">
-              <div className="absolute inset-0 p-margin flex items-center justify-center gap-24">
-                  
-                 <DataCenterNode
-                  image="/images/ciaro-city.jpg"
-                   hostname="CAIRO - Data Center"
-                   region="Cairo, EG"
-                   status="active"
-                   detail={disasterActive && !recovered ? "HANDLING FAILOVER" : "ACTIVE"}
-                   emphasized={disasterActive && !recovered}
-                 />
-                  <DataCenterNode
-                  image="/images/Alex-castle.avif"
-                   hostname="ALEX - Data Center"
-                   region="Alexandria, EG"
-                   status={disasterActive && !recovered ? "fault" : "active"}
-                   detail={
-                     disasterActive && !recovered
-                       ? "FAULT"
-                       : recovered
-                       ? "RECOVERED"
-                       : "ACTIVE"
-                   }
-                 />
+          <section className="flex-[3] flex flex-col gap-gutter h-full min-h-0">
+            <div className="flex-grow relative rounded-lg border-2 border-outline-variant overflow-hidden">
+              <RansomwareSim step={step} />
 
-              </div>
-
-              <div className="absolute top-4 right-4 text-right">
-                <p className="font-code-sm text-xs text-on-surface-variant">SERIAL: BDC-DR-ALX-CAI</p>
-                <p className="font-code-sm text-[10px] text-on-surface-variant opacity-60">
-                  REGIONAL FAILOVER LAYER: {disasterActive ? "ENGAGED" : "ARMED"}
+              <div className="absolute top-3 right-4 text-right pointer-events-none z-20">
+                <p className="font-code-sm text-[10px] text-white/50">SERIAL: BDC-DR-ALX-CAI</p>
+                <p className="font-code-sm text-[9px] text-white/30 uppercase tracking-wider">
+                  Regional Failover Layer: {active ? "Engaged" : "Armed"}
                 </p>
               </div>
             </div>
 
-            {/* Bottom Control Panel */}
-            <div className="h-32 bg-surface-container-high border-t border-outline-variant p-gutter flex items-center justify-center gap-margin shadow-inner">
-              <button
-              onClick={triggerDisaster}
-              disabled={disasterActive}
-              className="flex items-center gap-2 px-5 py-3 rounded-md border-2 border-error text-error font-bold text-xs uppercase tracking-widest hover:bg-error hover:text-white transition-colors disabled:opacity-40 disabled:hover:bg-transparent disabled:hover:text-error disabled:cursor-not-allowed"
-            >
-              {/* <span className="material-symbols-outlined text-lg">bolt</span> */}
-              Trigger Disaster
-            </button>
-            <ControlButton label="Hard Cycle" icon="refresh" text="REBOOT" colorClass="border-outline text-primary hover:bg-primary-container"   onClick={reboot} />
+            {/* Scenario controller: step tracker + narration + primary action */}
+            <div className="bg-surface-container-high border border-outline-variant rounded-lg p-4 shadow-inner shrink-0 flex items-center gap-6">
+              <div className="flex-1 min-w-0 flex flex-col gap-3">
+                <StepTracker step={step} />
+                <p className="font-code-sm text-[12px] leading-snug text-on-surface-variant">
+                  {STEP_SCRIPT[step]}
+                </p>
+              </div>
 
-              {/* <ControlButton label="Engage Power" icon="play_arrow" text="START" colorClass="border-secondary text-secondary hover:bg-secondary-container" />
-              <ControlButton label="Abort Sequence" icon="stop" text="STOP" colorClass="border-error text-error hover:bg-error" />
-              <ControlButton label="Hard Cycle" icon="refresh" text="REBOOT" colorClass="border-outline text-primary hover:bg-primary-container" />
-              <ControlButton label="Contain Fault" icon="lock" text="ISOLATE" colorClass="border-tertiary text-tertiary hover:bg-tertiary-container" /> */}
+              <button
+                onClick={action.onClick}
+                disabled={action.disabled}
+                className={`shrink-0 flex items-center gap-2 px-6 py-4 rounded-lg border-2 font-bold text-sm uppercase tracking-widest transition-all active:scale-95 disabled:cursor-not-allowed disabled:opacity-60 disabled:active:scale-100 ${toneCls[action.tone]}`}
+              >
+                <span className={`material-symbols-outlined text-xl ${action.spin ? "animate-spin" : ""}`}>
+                  {action.icon}
+                </span>
+                {action.label}
+              </button>
             </div>
           </section>
 
           {/* Sidebar Content */}
-          <section className="flex-1 flex flex-col gap-gutter h-full">
-            {/* Progress Module */}
-            <div className="bg-surface rounded-lg border border-outline-variant p-4 flex flex-col gap-4">
+          <section className="flex-1 flex flex-col gap-gutter h-full min-h-0">
+            {/* Incident Response checklist */}
+            <div className="bg-surface rounded-lg border border-outline-variant p-4 flex flex-col gap-4 shrink-0">
               <div className="flex justify-between items-center border-b border-outline-variant pb-2">
-                <h3 className="font-headline-md text-base text-primary uppercase">Scenario Tasks</h3>
+                <h3 className="font-headline-md text-base text-primary uppercase">Incident Response</h3>
                 <span className="font-code-sm text-xs text-on-surface-variant">
-                  {recovered ? "03 / 03" : disasterActive ? "01 / 03" : "00 / 03"}
+                  {String([contained, failedOver, restored].filter(Boolean).length).padStart(2, "0")} / 03
                 </span>
               </div>
               <div className="space-y-3">
-                <div
-                  className={`flex items-center gap-3 p-3 rounded transition-all border ${
-                    !disasterActive
-                      ? "bg-surface-container opacity-50"
-                      : recovered
-                      ? "bg-green-50 border-green-200"
-                      : "bg-amber-50 border-amber-200 animate-pulse"
-                  }`}
-                >
-                  <span
-                    className={`material-symbols-outlined ${
-                      !disasterActive
-                        ? ""
-                        : recovered
-                        ? "text-green-600"
-                        : "text-amber-600"
-                    }`}
-                  >
-                    {!disasterActive
-                      ? "radio_button_unchecked"
-                      : recovered
-                      ? "check_circle"
-                      : "radio_button_checked"}
-                  </span>
-                  <div className="flex-grow">
-                    <p
-                      className={`text-sm font-headline-md ${
-                        !disasterActive
-                          ? "text-on-surface-variant"
-                          : recovered
-                          ? "text-green-800"
-                          : "text-amber-800"
-                      }`}
-                    >
-                      Task 1: Trigger &amp; Isolate ALX-01 Fault
-                    </p>
-                    <p
-                      className={`font-code-sm text-[10px] ${
-                        !disasterActive
-                          ? ""
-                          : recovered
-                          ? "text-green-600"
-                          : "text-amber-600"
-                      }`}
-                    >
-                      {!disasterActive ? "WAITING" : recovered ? "COMPLETED" : "IN PROGRESS..."}
-                    </p>
-                  </div>
-                </div>
-
-                <div
-                  className={`flex items-center gap-3 p-3 rounded border ${
-                    disasterActive
-                      ? "bg-blue-50 border-blue-200"
-                      : "bg-surface-container opacity-50"
-                  }`}
-                >
-                  <span className="material-symbols-outlined">
-                    {disasterActive ? "check_circle" : "radio_button_unchecked"}
-                  </span>
-                  <div className="flex-grow">
-                    <p className="text-sm text-on-surface-variant font-headline-md">Task 2: Shift Load to CAI-01</p>
-                    <p className="font-code-sm text-[10px]">{disasterActive ? "COMPLETED" : "LOCKED"}</p>
-                  </div>
-                </div>
-
-                <div
-                  className={`flex items-center gap-3 p-3 rounded border ${
-                    recovered
-                      ? "bg-green-50 border-green-200"
-                      : "bg-surface-container opacity-50"
-                  }`}
-                >
-                  <span className="material-symbols-outlined">
-                    {recovered ? "check_circle" : "radio_button_unchecked"}
-                  </span>
-                  <div className="flex-grow">
-                    <p className="text-sm text-on-surface-variant font-headline-md">
-                      Task 3: Initiate Sequence RECOVER
-                    </p>
-                    <p className="font-code-sm text-[10px]">{recovered ? "COMPLETED" : "LOCKED"}</p>
-                  </div>
-                </div>
+                <Task
+                  index={1}
+                  title="Contain — sever link & quarantine ALX-01"
+                  state={contained ? "done" : step === "breach" ? "active" : "locked"}
+                />
+                <Task
+                  index={2}
+                  title="Failover — shift all traffic to CAI-01"
+                  state={failedOver ? "done" : step === "contained" ? "active" : "locked"}
+                />
+                <Task
+                  index={3}
+                  title="Restore — rebuild ALX-01 from clean backup"
+                  state={restored ? "done" : step === "failover" ? "active" : "locked"}
+                />
               </div>
+              <p className="font-code-sm text-[10px] text-on-surface-variant border-t border-outline-variant pt-2 leading-snug">
+                <span className="material-symbols-outlined align-middle text-[13px] text-secondary">
+                  lightbulb
+                </span>{" "}
+                The replication that saves you in an outage is what endangers you in ransomware —
+                contain <span className="font-bold">before</span> you fail over.
+              </p>
             </div>
 
             {/* Terminal Module */}
             <RecoveryTerminal
               onRecovered={() => {
-                setPhase("recovered");
+                setStep("restored");
                 void send("disasterrecovery", 1);
               }}
             />
@@ -414,147 +197,88 @@ export default function DisasterRecoveryPage() {
   );
 }
 
-function DataCenterNode({
-  image,
-  hostname,
-  region,
-  status,
-  detail,
-  emphasized = false,
-}: {
-  image: string;
-  hostname: string;
-  region: string;
-  status: "active" | "fault";
-  detail: string;
-  emphasized?: boolean;
-}) {
-  const fault = status === "fault";
+function StepTracker({ step }: { step: ScenarioStep }) {
+  const labels: Record<ScenarioStep, string> = {
+    stable: "Stable",
+    breach: "Breach",
+    contained: "Contain",
+    failover: "Failover",
+    restored: "Restore",
+  };
+  const current = STEP_ORDER.indexOf(step);
 
   return (
-    <div className="pointer-events-auto cursor-pointer group w-80">
-      <div
-        className={`rounded-2xl border-2 shadow-xl overflow-hidden transition-all duration-500 ${
-          fault
-            ? "border-error"
-            : emphasized
-            ? "border-secondary"
-            : "border-outline-variant group-hover:border-secondary"
-        }`}
-      >
-        {/* Card header bar */}
-        <div
-          className={`flex items-center justify-between px-4 py-2 relative z-10 ${
-            fault ? "bg-error/10" : "bg-secondary/10"
-          }`}
-        >
-          <span className="font-code-sm text-[20px] font-bold tracking-widest text-on-surface">
-            {hostname}
-          </span>
-          <div className="flex gap-1">
-            <div
-              className={`w-1.5 h-1.5 rounded-full ${
-                fault ? "bg-red-500 animate-blink" : "bg-green-500 animate-pulse"
-              }`}
-            />
-            <div
-              className={`w-1.5 h-1.5 rounded-full ${
-                fault ? "bg-red-500 animate-blink" : "bg-green-500"
-              }`}
-            />
+    <div className="flex items-center">
+      {STEP_ORDER.map((s, i) => {
+        const done = i < current;
+        const isCurrent = i === current;
+        const danger = s === "breach";
+        return (
+          <div key={s} className="flex items-center">
+            <div className="flex items-center gap-2">
+              <span
+                className={`flex h-6 w-6 items-center justify-center rounded-full border-2 font-code-sm text-[11px] font-bold transition-all ${
+                  done
+                    ? "border-secondary bg-secondary text-white"
+                    : isCurrent
+                      ? danger
+                        ? "border-error bg-error text-white animate-pulse"
+                        : "border-secondary bg-secondary/15 text-secondary animate-pulse"
+                      : "border-outline-variant text-on-surface-variant"
+                }`}
+              >
+                {done ? "✓" : i + 1}
+              </span>
+              <span
+                className={`font-data-label text-[11px] uppercase tracking-wider ${
+                  isCurrent ? "text-primary font-bold" : "text-on-surface-variant"
+                }`}
+              >
+                {labels[s]}
+              </span>
+            </div>
+            {i < STEP_ORDER.length - 1 && (
+              <div className={`mx-2 h-px w-8 ${i < current ? "bg-secondary" : "bg-outline-variant"}`} />
+            )}
           </div>
-        </div>
-
-        {/* Background image body */}
-        <div
-          className="relative h-44 bg-cover transition-all duration-500"
-          style={{ backgroundImage: `url(${image})`, backgroundPosition: "62% 40%" }}
-        >
-          {/* color-tint overlay so fault / active state still reads clearly over a photo */}
-          <div
-            className={`absolute inset-0 transition-colors duration-500 ${
-              fault
-                ? "bg-gradient-to-t from-error/70 via-error/30 to-transparent"
-                : emphasized
-                ? "bg-secondary/20"
-                : "bg-black/10"
-            }`}
-          />
-          {/* bottom gradient for text legibility */}
-          <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-black/70 to-transparent" />
-
-          <div className="absolute inset-x-0 bottom-0 flex flex-col items-center pb-3">
-            <span
-              className={`font-code-sm text-sm font-bold tracking-widest mb-0.5 drop-shadow-md ${
-                fault ? "text-red-300" : "text-white"
-              }`}
-            >
-              {detail}
-            </span>
-            <span className="font-code-sm text-[15px] text-white/80 drop-shadow-md">{region}</span>
-          </div>
-
-          {fault && (
-            <span className="material-symbols-outlined absolute top-3 right-3 text-error text-3xl animate-pulse drop-shadow-md">
-              warning
-            </span>
-          )}
-        </div>
-
-        {/* Footer stats */}
-        <div
-          className={`grid grid-cols-2 border-t border-outline-variant/50 ${
-            fault ? "bg-error-container" : "bg-surface-container-highest"
-          }`}
-        >
-          <div className="flex flex-col items-center py-2 border-r border-outline-variant/50">
-            <span className="font-code-sm text-[9px] text-on-surface-variant uppercase tracking-widest">
-              Load
-            </span>
-            <span className={`font-code-sm text-xs font-bold ${fault ? "text-error" : "text-secondary"}`}>
-              {fault ? "0%" : emphasized ? "94%" : "31%"}
-            </span>
-          </div>
-          <div className="flex flex-col items-center py-2">
-            <span className="font-code-sm text-[9px] text-on-surface-variant uppercase tracking-widest">
-              Ping
-            </span>
-            <span className={`font-code-sm text-xs font-bold ${fault ? "text-error" : "text-secondary"}`}>
-              {fault ? "--" : "12ms"}
-            </span>
-          </div>
-        </div>
-      </div>
+        );
+      })}
     </div>
   );
 }
 
-function ControlButton({
-  label,
-  icon,
-  text,
-  colorClass,
-  onClick,
+function Task({
+  index,
+  title,
+  state,
 }: {
-  label: string;
-  icon: string;
-  text: string;
-  colorClass: string;
-  onClick?: () => void;
-
+  index: number;
+  title: string;
+  state: "done" | "active" | "locked";
 }) {
+  const cls =
+    state === "done"
+      ? "bg-green-50 border-green-200"
+      : state === "active"
+        ? "bg-amber-50 border-amber-200 animate-pulse"
+        : "bg-surface-container opacity-50 border-transparent";
+  const icon =
+    state === "done" ? "check_circle" : state === "active" ? "radio_button_checked" : "lock";
+  const iconCls =
+    state === "done" ? "text-green-600" : state === "active" ? "text-amber-600" : "text-on-surface-variant";
+  const statusText = state === "done" ? "COMPLETED" : state === "active" ? "IN PROGRESS..." : "LOCKED";
+  const statusCls =
+    state === "done" ? "text-green-600" : state === "active" ? "text-amber-600" : "text-on-surface-variant";
+
   return (
-    <div className="flex flex-col items-center gap-3 font-headline-md">
-      {/* <span className="font-data-label text-[11px] uppercase tracking-widest text-on-surface-variant opacity-70">
-        {label}
-      </span> */}
-      <button  
-        onClick={onClick}
-        className={`w-32 h-12 bg-surface-container border-2 flex items-center justify-center gap-2 hover:text-white transition-colors rounded-sm ${colorClass}`}
-      >
-        <span className="material-symbols-outlined text-xl">{icon}</span>
-        <span className="text-xs font-bold tracking-widest">{text}</span>
-      </button>
+    <div className={`flex items-center gap-3 p-3 rounded transition-all border ${cls}`}>
+      <span className={`material-symbols-outlined ${iconCls}`}>{icon}</span>
+      <div className="flex-grow">
+        <p className="text-sm font-headline-md text-on-surface">
+          Step {index}: {title}
+        </p>
+        <p className={`font-code-sm text-[10px] ${statusCls}`}>{statusText}</p>
+      </div>
     </div>
   );
 }

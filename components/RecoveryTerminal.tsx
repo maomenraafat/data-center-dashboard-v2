@@ -5,20 +5,20 @@ import { useRef, useState } from "react";
 type LogLine = { text: string; className: string };
 
 const INITIAL_LOG: LogLine[] = [
-  { text: "[ 0.000 ] Booting BLOOM-OS Regional Fabric...", className: "text-white opacity-90" },
-  { text: "[ 0.124 ] Health Check: Mediterranean Nodes...", className: "text-white opacity-90" },
-  { text: "[ 0.442 ] ALX-01 CRITICAL FAULT DETECTED", className: "text-error font-bold" },
-  { text: "[ 0.450 ] Redirecting traffic to Cairo (CAI-01)", className: "text-amber-400" },
-  { text: "[ 0.820 ] Load balancer re-syncing...", className: "text-white opacity-90" },
-  { text: "[ 1.209 ] Connection established: CAI-01 active.", className: "text-blue-300" },
-  { text: "[ 1.450 ] Simulation: Alexandria Node Failure initiated.", className: "text-white opacity-90" },
-  { text: "[ 2.500 ] Awaiting Recovery Command...", className: "text-amber-400" },
+  { text: "[ 0.000 ] BLOOM-OS Threat Monitor online...", className: "text-white opacity-90" },
+  { text: "[ 0.124 ] EDR scan: Mediterranean Nodes...", className: "text-white opacity-90" },
+  { text: "[ 0.442 ] ALX-01 MASS FILE-ENCRYPTION DETECTED — “BloomCrypt.v3”", className: "text-error font-bold" },
+  { text: "[ 0.450 ] Malicious C2 beacon + lateral movement to CAI-01", className: "text-error font-bold" },
+  { text: "[ 0.820 ] Auto-containment: severing inter-DC replication link...", className: "text-amber-400" },
+  { text: "[ 1.209 ] Both sites quarantined. Ransom note dropped.", className: "text-amber-400" },
+  { text: "[ 1.450 ] Immutable backups located (age 00:04).", className: "text-blue-300" },
+  { text: "[ 2.500 ] Type 'recover' to restore both sites from backup...", className: "text-amber-400" },
 ];
 
 const RECOVER_SEQUENCE: LogLine[] = [
-  { text: "[ 3.120 ] Initiating ALX-01 reboot...", className: "text-amber-400" },
-  { text: "[ 4.500 ] ALX-01 heartbeat detected.", className: "text-blue-300" },
-  { text: "[ 5.000 ] System recovered. All nodes operational.", className: "text-green-400 font-bold" },
+  { text: "[ 3.120 ] Wiping infected volumes · rotating credentials...", className: "text-amber-400" },
+  { text: "[ 4.500 ] Restoring ALX-01 & CAI-01 from immutable backup...", className: "text-blue-300" },
+  { text: "[ 5.000 ] Threat eradicated. All nodes clean & operational.", className: "text-green-400 font-bold" },
 ];
 
 export default function RecoveryTerminal({
