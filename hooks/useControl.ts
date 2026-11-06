@@ -13,6 +13,7 @@ import { useDevOptions } from "@/context/DevOptionsContext";
 import { CONTROL_DEFINITIONS, type ControlCommand, type ControlKind } from "@/lib/types";
 import { buildControlUrl, isValidControlValue, sendControlReal } from "@/lib/esp";
 import { mockEsp } from "@/lib/mockEsp";
+import { emitRequestLog } from "@/lib/requestLog";
 
 /** Cosmetic site selector used by the load-balancing UI. Both sites currently share the
  *  single configured control board; per-site URLs can be added to Settings later. */
@@ -64,6 +65,16 @@ export function useControl(): UseControl {
           simMsg ? `${simMsg} · sent LIVE` : `sent ${def.parameter}=${value} → ${def.path}`,
         );
       } else {
+        emitRequestLog({
+          source: "control",
+          method: "GET",
+          url,
+          request: { [cmd.parameter]: cmd.value },
+          status: null,
+          ok: true,
+          durationMs: 0,
+          response: simMsg,
+        });
         setLastResult(simMsg);
       }
       return true;

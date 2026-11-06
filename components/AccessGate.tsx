@@ -194,7 +194,18 @@ export function AccessGate({ children }: { children: ReactNode }) {
               Board {esp1Ip} · use the physical keypad + RFID
             </p>
             {realError && (
-              <p className="mt-3 font-code-sm text-error break-words">{realError}</p>
+              <>
+                <p className="mt-3 font-code-sm text-error break-words">{realError}</p>
+                <button
+                  onClick={() => setRealState("UNLOCKED")}
+                  className="mt-4 w-full py-3 rounded border border-secondary bg-secondary text-on-secondary font-code-sm uppercase tracking-widest"
+                >
+                  Continue in LIVE
+                </button>
+                <p className="mt-2 font-code-sm text-on-surface-variant">
+                  Security board did not answer. The dashboard stays LIVE and still drives the LED controller.
+                </p>
+              </>
             )}
           </div>
         )}

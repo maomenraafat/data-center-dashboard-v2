@@ -6,6 +6,8 @@ import { LastRequestProvider } from "@/context/LastRequestContext";
 import { DevOptionsProvider } from "@/context/DevOptionsContext";
 import { AccessGate } from "@/components/AccessGate";
 import LastRequestBadge from "@/components/LastRequestBadge";
+import RequestLogPanel from "@/components/RequestLogPanel";
+import { RequestLogProvider } from "@/context/RequestLogContext";
 
 const hanken = Hanken_Grotesk({
   subsets: ["latin"],
@@ -49,10 +51,14 @@ export default function RootLayout({
           <DevOptionsProvider>
             {/* LastRequestProvider tracks the most recent control URL for the on-screen badge. */}
             <LastRequestProvider>
-              {/* AccessGate is the Bloom-styled 2FA entrance; it renders children once unlocked. */}
-              <AccessGate>{children}</AccessGate>
-              {/* Corner badge showing the exact URL each control sends (sits below the gate). */}
-              <LastRequestBadge />
+              <RequestLogProvider>
+                {/* AccessGate is the Bloom-styled 2FA entrance; it renders children once unlocked. */}
+                <AccessGate>{children}</AccessGate>
+                {/* Corner badge showing the exact URL each control sends (sits below the gate). */}
+                <LastRequestBadge />
+                {/* Every ESP request and response, visible on the gate and after unlock. */}
+                <RequestLogPanel />
+              </RequestLogProvider>
             </LastRequestProvider>
           </DevOptionsProvider>
         </EnvironmentProvider>

@@ -1,6 +1,7 @@
 // Real-hardware ESP helpers. The request-sending logic is preserved verbatim from the
 // original app.js so behaviour against the physical ESP32 is unchanged.
 
+import { emitRequestLog } from "./requestLog";
 import type { ControlCommand, Esp1Status } from "./types";
 
 /** Prepend http:// if the user omitted a scheme (from app.js normalizeUrl). */
@@ -29,11 +30,36 @@ export function buildControlUrl(baseUrl: string, cmd: ControlCommand): URL {
  */
 export async function sendControlReal(baseUrl: string, cmd: ControlCommand): Promise<URL> {
   const requestUrl = buildControlUrl(baseUrl, cmd);
-  await fetch(requestUrl, {
-    method: "GET",
-    mode: "no-cors",
-    cache: "no-store",
-  });
+  const started = Date.now();
+  try {
+    await fetch(requestUrl, {
+      method: "GET",
+      mode: "no-cors",
+      cache: "no-store",
+    });
+    emitRequestLog({
+      source: "control",
+      method: "GET",
+      url: requestUrl.toString(),
+      request: { [cmd.parameter]: cmd.value },
+      status: null,
+      ok: true,
+      durationMs: Date.now() - started,
+      response: "dispatched (no-cors, response body not readable)",
+    });
+  } catch (error) {
+    emitRequestLog({
+      source: "control",
+      method: "GET",
+      url: requestUrl.toString(),
+      request: { [cmd.parameter]: cmd.value },
+      status: null,
+      ok: false,
+      durationMs: Date.now() - started,
+      error: (error as Error).message,
+    });
+    throw error;
+  }
   return requestUrl;
 }
 
@@ -44,21 +70,49 @@ export async function sendControlReal(baseUrl: string, cmd: ControlCommand): Pro
  * but the Next.js server can fetch it server-to-server and relay it from our own origin.
  */
 export async function fetchSecurityStatusReal(esp1Ip: string): Promise<Esp1Status> {
+  const target = `${normalizeUrl(esp1Ip)}/status`;
   const url = `/api/security-status?ip=${encodeURIComponent(esp1Ip)}`;
+  const started = Date.now();
   const res = await fetch(url, {
     signal: AbortSignal.timeout(3000),
     cache: "no-store",
   });
-  if (!res.ok) {
-    // Surface the proxy's reason (wrong board, unreachable, timeout) to the caller.
-    const detail = (await res.json().catch(() => null)) as { error?: string } | null;
-    throw new Error(detail?.error ?? `Status proxy returned ${res.status}`);
+  const text = await res.text();
+  let parsed: { error?: string } & Partial<Esp1Status> | null = null;
+  try {
+    parsed = text ? (JSON.parse(text) as { error?: string } & Partial<Esp1Status>) : null;
+  } catch {
+    parsed = null;
   }
-  const data = (await res.json()) as Partial<Esp1Status>;
-  return {
+  if (!res.ok) {
+    const message = parsed?.error ?? `Status proxy returned ${res.status}`;
+    emitRequestLog({
+      source: "security",
+      method: "GET",
+      url: target,
+      status: res.status,
+      ok: false,
+      durationMs: Date.now() - started,
+      response: parsed ?? text,
+      error: message,
+    });
+    throw new Error(message);
+  }
+  const data = parsed ?? {};
+  const status: Esp1Status = {
     state: data.state ?? "LOCKED",
     greenLed: data.greenLed ?? false,
     timerRunning: data.timerRunning ?? false,
     time: data.time ?? 0,
   };
+  emitRequestLog({
+    source: "security",
+    method: "GET",
+    url: target,
+    status: res.status,
+    ok: true,
+    durationMs: Date.now() - started,
+    response: status,
+  });
+  return status;
 }

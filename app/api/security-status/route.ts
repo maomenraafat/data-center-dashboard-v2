@@ -9,6 +9,7 @@
 // The dev/prod server must itself be on the same network as the ESP.
 
 import { normalizeUrl } from "@/lib/esp";
+import { logUpstream } from "@/lib/requestLog";
 
 // A live poll — never cache, always run at request time.
 export const dynamic = "force-dynamic";
@@ -20,6 +21,7 @@ export async function GET(request: Request): Promise<Response> {
   }
 
   const target = `${normalizeUrl(ip)}/status`;
+  const started = Date.now();
   try {
     const res = await fetch(target, {
       cache: "no-store",
@@ -35,11 +37,9 @@ export async function GET(request: Request): Promise<Response> {
 
     // Read the body once, as text, so we can report it whatever the status/type.
     const bodyText = await res.text();
+    logUpstream("security", "GET", target, res.status, Date.now() - started, undefined, bodyText.slice(0, 800));
 
     if (!res.ok) {
-      console.error(
-        `[security-status] ${target} -> HTTP ${res.status}. Body: ${bodyText.slice(0, 200)}`,
-      );
       return Response.json(
         {
           error: `ESP at ${ip} answered HTTP ${res.status} for /status (expected 200).`,
@@ -54,9 +54,6 @@ export async function GET(request: Request): Promise<Response> {
       const data = JSON.parse(bodyText);
       return Response.json(data, { headers: { "Cache-Control": "no-store" } });
     } catch {
-      console.error(
-        `[security-status] ${target} -> 200 but non-JSON body: ${bodyText.slice(0, 200)}`,
-      );
       return Response.json(
         {
           error: `ESP at ${ip} returned 200 but the body isn't JSON.`,
@@ -67,7 +64,7 @@ export async function GET(request: Request): Promise<Response> {
     }
   } catch (error) {
     const message = (error as Error).message;
-    console.error(`[security-status] fetch ${target} failed: ${message}`);
+    logUpstream("security", "GET", target, null, Date.now() - started, undefined, message);
     return Response.json(
       { error: `Could not reach ESP at ${ip}: ${message}` },
       { status: 504 },

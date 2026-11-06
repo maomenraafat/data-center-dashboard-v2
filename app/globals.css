@@ -457,3 +457,8 @@ body {
   color: var(--color-on-background);
 }
 
+@keyframes site-a-packet {
+  from { offset-distance: 0%; }
+  to { offset-distance: 100%; }
+}
+
