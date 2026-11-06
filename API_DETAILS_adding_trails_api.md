@@ -8,7 +8,7 @@ This document serves as the complete technical integration guide for front-end d
 
 * **Base URL**: `http://<ESP32_IP>`
   * **Station / Node IP**: `http://192.168.4.50` *(configured static IP on local LAN)*
-  * **SoftAP Mode (Fallback Direct Wi-Fi)**: `http://192.168.4.1` *(SSID:* `ESP32-LED-AP`*, Pass:* `12345678`*)*
+  * **SoftAP Mode (Fallback Direct Wi-Fi)**: `http://192.168.4.50` *(SSID:* `ESP32-LED-AP`*, Pass:* `12345678`*)*
 * **Port**: `80` (HTTP)
 * **Format**: All requests and responses use **JSON** (`Content-Type: application/json`).
 * **CORS Support**: The firmware natively returns `Access-Control-Allow-Origin: `* and handles all browser `OPTIONS` preflight checks. You can send requests directly from any browser origin (`localhost:3000`, `file://`, or a deployed domain).
@@ -62,7 +62,7 @@ const data = await res.json();
     "apPass": "12345678",
     "staSSID": "Bloom_Core_WiFi",
     "staticIP": "192.168.4.50",
-    "gateway": "192.168.4.1",
+    "gateway": "192.168.4.50",
     "subnet": "255.255.255.0"
   },
   "masterPower": true,
@@ -285,7 +285,7 @@ Saves Wi-Fi credentials, host mode, and static IP configuration to NVS flash, th
   "staSSID": "Bloom_Core_WiFi",
   "staPass": "NetworkPassword",
   "staticIP": "192.168.4.50",
-  "gateway": "192.168.4.1",
+  "gateway": "192.168.4.50",
   "subnet": "255.255.255.0"
 }
 ```
@@ -361,7 +361,7 @@ Enables the browser to communicate with other ESP32 nodes through a single gatew
 
 ```javascript
 // Relays a packet command to another board via the primary ESP32
-fetch("http://192.168.4.1/api/proxy?target=192.168.4.51&path=/api/packet", {
+fetch("http://192.168.4.50/api/proxy?target=192.168.4.51&path=/api/packet", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({ code: "WAN-R5", speed: 20 })

@@ -8,7 +8,7 @@ import { useLastRequest } from "@/context/LastRequestContext";
 import { useDevOptions } from "@/context/DevOptionsContext";
 import { useEnvironment } from "@/context/EnvironmentContext";
 import { useControl } from "@/hooks/useControl";
-import { playSiteAMode, sendDisasterTrail, sendLoadBalanceTrail, sendRouteTrail, sendSiteATrail, TRAIL_TEST } from "@/lib/ledBoard";
+import { playSiteAMode, sendDisasterTrail, sendFailoverTrail, sendLoadBalanceTrail, sendRouteTrail, sendSiteATrail, TRAIL_TEST } from "@/lib/ledBoard";
 import { backupServer, disasterDestination, routeBetween, type ServerRoute } from "@/lib/route";
 import { NODES, type NodeId } from "@/lib/siteA";
 
@@ -135,7 +135,9 @@ export default function TopologyPage() {
     }
     setLedPending(true);
     setLedNote("Sending trail…");
-    void sendRouteTrail(controlUrl, found.hops, found.label).then((result) => {
+    // Previous failover call, POST /api/trail with {code, reverse} hops:
+    // void sendRouteTrail(controlUrl, found.hops, found.label)
+    void sendFailoverTrail(controlUrl, found.hops, found.label, down).then((result) => {
       if (run !== ticket.current) return;
       setLedPending(false);
       setLedNote(`${result.summary}.${avoided}`);
@@ -149,6 +151,16 @@ export default function TopologyPage() {
     setServerRoute(found);
     if (!found) {
       setLedNote(`No path remains around ${down.join(", ") || "the failed links"}.`);
+      if (live && down.length > 0) {
+        const run = ++ticket.current;
+        setLedPending(true);
+        void sendFailoverTrail(controlUrl, [], "No path", down).then((result) => {
+          if (run !== ticket.current) return;
+          setLedPending(false);
+          setLedNote(`${result.summary}. No path remains around ${down.join(", ")}.`);
+          setLast({ url: result.url, mode: "real", at: Date.now() });
+        });
+      }
       return;
     }
     sendFoundPath(found, down);

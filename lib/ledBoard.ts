@@ -134,7 +134,7 @@ type DisasterHop = { code: string; reverse: boolean };
 
 /**
  * Disaster uses POST /api/v2/trail. The cut link stays solid red while the comet runs the path.
- * The path digits match /api/trail: 1 forward, 2 reversed. Routing and failover use sendRouteTrail.
+ * The path digits match /api/trail: 1 forward, 2 reversed. Routing still uses sendRouteTrail.
  */
 export async function sendDisasterTrail(
   ip: string,
@@ -165,6 +165,45 @@ export async function sendDisasterTrail(
   try {
     await callBoard(ip, "POST", "/api/v2/trail", body);
     const solid = cutLink ? ` · solid ${cutLink}` : "";
+    return { ok: true, url, summary: `Trail sent: ${label}${solid}` };
+  } catch (error) {
+    return { ok: false, url, summary: (error as Error).message };
+  }
+}
+
+/**
+ * Failover uses POST /api/v2/trail. Every link still marked down is a solid red strip.
+ * The previous call is sendRouteTrail (POST /api/trail), left in place on the page.
+ */
+export async function sendFailoverTrail(
+  ip: string,
+  hops: { code: string; reverse: boolean }[],
+  label: string,
+  cutLinks: readonly string[],
+): Promise<LedResult> {
+  const url = `${new URL(normalizeUrl(ip)).origin}/api/v2/trail`;
+  const body: {
+    path: string;
+    trailLength: number;
+    fade: boolean;
+    color: string;
+    intensity: number;
+    speed: number;
+    solid?: { strip: string; color: string; autoOff: boolean }[];
+  } = {
+    path: trailPath(hops),
+    trailLength: 8,
+    fade: true,
+    color: "#00E5FF",
+    intensity: 255,
+    speed: 20,
+  };
+  if (cutLinks.length > 0) {
+    body.solid = cutLinks.map((strip) => ({ strip, color: "#FF0000", autoOff: true }));
+  }
+  try {
+    await callBoard(ip, "POST", "/api/v2/trail", body);
+    const solid = cutLinks.length > 0 ? ` · solid ${cutLinks.join(", ")}` : "";
     return { ok: true, url, summary: `Trail sent: ${label}${solid}` };
   } catch (error) {
     return { ok: false, url, summary: (error as Error).message };

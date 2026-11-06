@@ -1,7 +1,7 @@
 "use client";
 
 // Unobtrusive bottom-right badge showing the exact URL of the most recent control request
-// (e.g. http://192.168.4.1/network?network=3), plus whether it was SIM or LIVE. Sits below
+// (e.g. http://192.168.4.50/network?network=3), plus whether it was SIM or LIVE. Sits below
 // the 2FA gate's z-index, so it only appears once the app is unlocked and a control fires.
 
 import { useLastRequest } from "@/context/LastRequestContext";

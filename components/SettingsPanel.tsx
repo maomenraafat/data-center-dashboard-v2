@@ -100,13 +100,13 @@ export default function SettingsPanel({
             label="Security Board IP (ESP 1)"
             value={esp1Ip}
             onChange={setEsp1Ip}
-            placeholder="192.168.4.1" //10.102.224.43
+            placeholder="192.168.4.50" //10.102.224.43
           />
           <Field
             label="Control Board URL (ESP 2)"
             value={controlUrl}
             onChange={setControlUrl}
-            placeholder="192.168.4.1"
+            placeholder="192.168.4.50"
           />
           <Field label="Mock 2FA PIN" value={mockCode} onChange={setMockCode} placeholder="1234" />
         </div>
