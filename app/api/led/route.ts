@@ -7,7 +7,7 @@ import { logUpstream } from "@/lib/requestLog";
 
 export const dynamic = "force-dynamic";
 
-const ALLOWED_PATHS = new Set(["/api/status", "/api/packet", "/api/trail", "/api/v2/trail", "/api/leds", "/api/led", "/api/test"]);
+const ALLOWED_PATHS = new Set(["/api/status", "/api/packet", "/api/trail", "/api/v2/trail", "/api/v3/trail", "/api/leds", "/api/led", "/api/test"]);
 
 type LedProxyBody = {
   ip?: string;

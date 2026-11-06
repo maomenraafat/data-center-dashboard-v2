@@ -23,6 +23,10 @@ const DISASTER_PAIRS: Partial<Record<NodeId, { link: string; backup: NodeId }>> 
   s12: { link: "H", backup: "s14" },
 };
 
+export function backupServer(id: NodeId): NodeId | null {
+  return DISASTER_PAIRS[id]?.backup ?? null;
+}
+
 export function disasterDestination(
   destination: NodeId,
   blocked: readonly string[],

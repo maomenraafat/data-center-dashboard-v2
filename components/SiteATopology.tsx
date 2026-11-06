@@ -42,6 +42,20 @@ export type DisasterPick = FailoverPick & {
   redirect: NodeId | null;
 };
 
+export type LoadBalancePick = {
+  active: boolean;
+  source: NodeId | null;
+  destination: NodeId | null;
+  partner: NodeId | null;
+  path: NodeId[] | null;
+  partnerPath: NodeId[] | null;
+  label: string | null;
+  partnerLabel: string | null;
+  onPick: (id: NodeId) => void;
+};
+
+const PAIRED_SERVERS = new Set<NodeId>(["s13", "s11", "s14", "s12"]);
+
 type Point = { x: number; y: number };
 type Positions = Record<NodeId, Point>;
 
@@ -92,14 +106,14 @@ function roundTripPath(nodes: NodeId[], points: Positions) {
     .join(" ")}`;
 }
 
-function RoutePacket({ nodes, points }: { nodes: NodeId[]; points: Positions }) {
+function RoutePacket({ nodes, points, color = "#22d3ee" }: { nodes: NodeId[]; points: Positions; color?: string }) {
   const dur = Math.max(2.8, (nodes.length - 1) * 1.15);
   const d = roundTripPath(nodes, points);
   return (
-    <g key={nodes.join("-")}>
+    <g key={`${color}-${nodes.join("-")}`}>
       <circle
         r={7}
-        fill="#22d3ee"
+        fill={color}
         filter="url(#siteA-glow)"
         style={{
           offsetPath: `path('${d}')`,
@@ -262,11 +276,13 @@ export default function SiteATopology({
   routing,
   failover,
   disaster,
+  balance,
 }: {
   mode: number;
   routing?: RoutingPick;
   failover?: FailoverPick;
   disaster?: DisasterPick;
+  balance?: LoadBalancePick;
 }) {
   const scene = SCENES[mode] ?? SCENES[1];
   const down = new Set(scene.down);
@@ -332,25 +348,37 @@ export default function SiteATopology({
   const placed = (Object.keys(pos) as NodeId[]).map((id) => turn(pos[id].x, pos[id].y));
   const failing = failover?.active ?? false;
   const recovering = disaster?.active ?? false;
+  const balancing = balance?.active ?? false;
   const marking = failing || recovering;
   const livePick = recovering ? disaster : failing ? failover : null;
-  const picking = (routing?.active ?? false) || marking;
-  const activeSource = livePick ? (livePick.source ?? null) : (routing?.source ?? null);
+  const picking = (routing?.active ?? false) || marking || balancing;
+  const activeSource = balancing ? (balance?.source ?? null) : livePick ? (livePick.source ?? null) : (routing?.source ?? null);
   const requested = recovering && disaster?.redirect ? disaster.destination : null;
-  const activeDestination = recovering
-    ? (disaster?.redirect ?? disaster?.destination ?? null)
-    : livePick
-      ? (livePick.destination ?? null)
-      : (routing?.destination ?? null);
-  const activePath = livePick ? (livePick.path ?? null) : (routing?.path ?? null);
+  const activeDestination = balancing
+    ? (balance?.destination ?? null)
+    : recovering
+      ? (disaster?.redirect ?? disaster?.destination ?? null)
+      : livePick
+        ? (livePick.destination ?? null)
+        : (routing?.destination ?? null);
+  const activePath = balancing ? (balance?.path ?? null) : livePick ? (livePick.path ?? null) : (routing?.path ?? null);
   const manualDown = new Set(livePick?.down ?? []);
   const routePath = activePath ? sourceFirst(activePath, activeSource) : null;
+  const partnerPath = balancing && balance?.partnerPath ? sourceFirst(balance.partnerPath, activeSource) : null;
   const routeLinks = new Set<string>();
+  const partnerLinks = new Set<string>();
   const routeNodes = new Set<NodeId>(routePath ?? []);
   if (routePath) {
     for (let i = 0; i < routePath.length - 1; i++) {
       const link = linkByEnds(routePath[i], routePath[i + 1]);
       if (link) routeLinks.add(link.id);
+    }
+  }
+  if (partnerPath) {
+    partnerPath.forEach((id) => routeNodes.add(id));
+    for (let i = 0; i < partnerPath.length - 1; i++) {
+      const link = linkByEnds(partnerPath[i], partnerPath[i + 1]);
+      if (link) partnerLinks.add(link.id);
     }
   }
   const active = new Map<string, string>();
@@ -382,6 +410,13 @@ export default function SiteATopology({
           ) : null}
           {disaster?.label && <p className="mt-1 font-mono text-sm text-white break-all">{disaster.label}</p>}
           {disaster?.note && <p className="mt-1 text-[11px] leading-snug text-amber-200">{disaster.note}</p>}
+        </div>
+      )}
+      {balancing && (balance?.label || balance?.partnerLabel) && (
+        <div className="pointer-events-none absolute left-4 top-14 z-10 max-w-[min(520px,70%)] rounded border border-violet-300/50 bg-[#051424]/90 px-3 py-2">
+          <p className="font-code-sm text-[11px] uppercase tracking-[0.22em] text-violet-300">load balance</p>
+          {balance?.label && <p className="mt-1 font-mono text-sm text-red-300 break-all">{balance.label}</p>}
+          {balance?.partnerLabel && <p className="mt-1 font-mono text-sm text-blue-300 break-all">{balance.partnerLabel}</p>}
         </div>
       )}
       {failing && (failover?.label || (failover?.down.length ?? 0) > 0 || failover?.note) && (
@@ -460,10 +495,11 @@ export default function SiteATopology({
           const B = turn(pos[link.b].x, pos[link.b].y);
           const isDown = marking ? manualDown.has(link.id) : down.has(link.id);
           const routed = routeLinks.has(link.id);
+          const shared = partnerLinks.has(link.id);
           const fromA = !routePath || routePath.indexOf(link.a) < routePath.indexOf(link.b);
-          const color = isDown ? undefined : routed ? "#22d3ee" : active.get(link.id);
+          const color = isDown ? undefined : routed ? (balancing ? "#FF0000" : "#22d3ee") : shared ? "#0000FF" : active.get(link.id);
           const idleDash = link.kind === "bk" || link.kind === "wanbk" ? "8 6" : undefined;
-          const faded = !marking && !routed && (siteDown || isDown);
+          const faded = !marking && !routed && !shared && (siteDown || isDown);
           const midX = (A.x + B.x) / 2;
           const midY = (A.y + B.y) / 2;
           return (
@@ -473,8 +509,8 @@ export default function SiteATopology({
                 y1={A.y}
                 x2={B.x}
                 y2={B.y}
-                stroke={isDown ? "#ef4444" : routed ? "#22d3ee" : baseStroke(link.kind)}
-                strokeWidth={isDown || routed ? 5 : 3}
+                stroke={isDown ? "#ef4444" : routed ? (balancing ? "#FF0000" : "#22d3ee") : shared ? "#0000FF" : baseStroke(link.kind)}
+                strokeWidth={isDown || routed || shared ? 5 : 3}
                 strokeLinecap="round"
                 strokeDasharray={isDown ? undefined : idleDash}
               />
@@ -497,6 +533,18 @@ export default function SiteATopology({
                     repeatCount="indefinite"
                   />
                 </line>
+              )}
+              {balancing && routed && shared && !isDown && (
+                <line
+                  x1={A.x}
+                  y1={A.y}
+                  x2={B.x}
+                  y2={B.y}
+                  stroke="#0000FF"
+                  strokeWidth={3}
+                  strokeLinecap="round"
+                  strokeDasharray="4 8"
+                />
               )}
               <LinkCode
                 x1={A.x}
@@ -569,23 +617,34 @@ export default function SiteATopology({
           const at = turn(pos[id].x, pos[id].y);
           const isDead = dead.has(id);
           const onRoute = routeNodes.has(id);
-          const chosen = id === activeSource || id === activeDestination || id === requested;
-          const selectable = node.t !== "cloud" && (marking || (picking && node.t === "srv"));
+          const partner = balancing ? (balance?.partner ?? null) : null;
+          const chosen = id === activeSource || id === activeDestination || id === requested || id === partner;
+          const selectable =
+            node.t !== "cloud" &&
+            (balancing
+              ? !balance?.source || PAIRED_SERVERS.has(id) || id === balance.source
+              : marking || (picking && node.t === "srv"));
           const dim = picking ? Boolean(activePath) && !onRoute && id !== requested : lit.size > 0 && !lit.has(id) && !isDead;
           const ring = isDead ? 0 : lit.has(id) ? 1 : 0;
           const glow =
             selectable && (!activePath || chosen)
-              ? id === requested
-                ? "#f87171"
-                : id === activeSource
-                  ? "#fbbf24"
-                  : id === activeDestination
-                    ? "#34d399"
-                    : recovering
-                      ? "#fb7185"
-                      : failing
-                        ? "#f59e0b"
-                        : "#22d3ee"
+              ? id === partner
+                ? "#0000FF"
+                : id === requested
+                  ? "#f87171"
+                  : id === activeSource
+                    ? "#fbbf24"
+                    : id === activeDestination
+                      ? balancing
+                        ? "#FF0000"
+                        : "#34d399"
+                      : balancing
+                        ? "#c084fc"
+                        : recovering
+                          ? "#fb7185"
+                          : failing
+                            ? "#f59e0b"
+                            : "#22d3ee"
               : null;
           return (
             <g
@@ -602,7 +661,7 @@ export default function SiteATopology({
                   movedRef.current = 0;
                   return;
                 }
-                (livePick ? livePick.onPick : routing?.onPick)?.(id);
+                (balancing ? balance?.onPick : livePick ? livePick.onPick : routing?.onPick)?.(id);
               }}
             >
               <circle r={36} fill="transparent" />
@@ -640,12 +699,17 @@ export default function SiteATopology({
           );
         })}
 
-        {routePath && routePath.length > 1 && <RoutePacket nodes={routePath} points={pos} />}
+        {routePath && routePath.length > 1 && <RoutePacket nodes={routePath} points={pos} color={balancing ? "#FF0000" : "#22d3ee"} />}
+        {partnerPath && partnerPath.length > 1 && <RoutePacket nodes={partnerPath} points={pos} color="#0000FF" />}
       </svg>
 
       <div className="mt-2 flex items-center justify-between gap-4">
         <p className="font-code-sm text-[11px] uppercase tracking-wide text-on-surface-variant">
-          {recovering
+          {balancing
+            ? activePath
+              ? "Load balance — red is the server you picked. Blue is its backup."
+              : "Load balance — pick a source, then Server13, Server11, Server14, or Server12."
+            : recovering
             ? activePath
               ? "Disaster — a down K, J, H, or G link sends the request to the paired server."
               : disaster?.destination

@@ -8,8 +8,8 @@ import { useLastRequest } from "@/context/LastRequestContext";
 import { useDevOptions } from "@/context/DevOptionsContext";
 import { useEnvironment } from "@/context/EnvironmentContext";
 import { useControl } from "@/hooks/useControl";
-import { playSiteAMode, sendDisasterTrail, sendRouteTrail, sendSiteATrail, TRAIL_TEST } from "@/lib/ledBoard";
-import { disasterDestination, routeBetween, type ServerRoute } from "@/lib/route";
+import { playSiteAMode, sendDisasterTrail, sendLoadBalanceTrail, sendRouteTrail, sendSiteATrail, TRAIL_TEST } from "@/lib/ledBoard";
+import { backupServer, disasterDestination, routeBetween, type ServerRoute } from "@/lib/route";
 import { NODES, type NodeId } from "@/lib/siteA";
 
 // The network control board accepts a mode 1-5. Labels mirror the scenarios the original
@@ -29,6 +29,8 @@ export default function TopologyPage() {
   const [routingOn, setRoutingOn] = useState(false);
   const [failoverOn, setFailoverOn] = useState(false);
   const [disasterOn, setDisasterOn] = useState(false);
+  const [balanceOn, setBalanceOn] = useState(false);
+  const [partnerRoute, setPartnerRoute] = useState<ServerRoute | null>(null);
   const [redirect, setRedirect] = useState<NodeId | null>(null);
   const [disasterNote, setDisasterNote] = useState<string | null>(null);
   const [failedLinks, setFailedLinks] = useState<string[]>([]);
@@ -80,6 +82,7 @@ export default function TopologyPage() {
     setRoutingOn(true);
     setFailoverOn(false);
     setDisasterOn(false);
+    setBalanceOn(false);
     setRedirect(null);
     setDisasterNote(null);
     setFailedLinks([]);
@@ -94,6 +97,7 @@ export default function TopologyPage() {
     setSource(null);
     setDestination(null);
     setServerRoute(null);
+    setPartnerRoute(null);
     setRedirect(null);
     setDisasterNote(null);
   }
@@ -114,6 +118,7 @@ export default function TopologyPage() {
     setFailoverOn(true);
     setRoutingOn(false);
     setDisasterOn(false);
+    setBalanceOn(false);
     setFailedLinks([]);
     clearSelection();
     setLedPending(false);
@@ -165,10 +170,95 @@ export default function TopologyPage() {
     setDisasterOn(true);
     setRoutingOn(false);
     setFailoverOn(false);
+    setBalanceOn(false);
     setFailedLinks([]);
     clearSelection();
     setLedPending(false);
     setLedNote("Pick two nodes. Click K, J, H, or G to send the request to the paired server.");
+  }
+
+  function stopBalance() {
+    ++ticket.current;
+    setBalanceOn(false);
+    setMode(1);
+    clearSelection();
+    setLedPending(false);
+    setLedNote("Load balance stopped");
+  }
+
+  function startBalance() {
+    ++ticket.current;
+    setMode(1);
+    setBalanceOn(true);
+    setRoutingOn(false);
+    setFailoverOn(false);
+    setDisasterOn(false);
+    setFailedLinks([]);
+    clearSelection();
+    setLedPending(false);
+    setLedNote("Pick a source, then Server13, Server11, Server14, or Server12.");
+  }
+
+  function sendBalancePaths(primary: ServerRoute, secondary: ServerRoute) {
+    const run = ++ticket.current;
+    const summary = `${primary.label} · ${secondary.label}`;
+    if (!live) {
+      setLedPending(false);
+      setLedNote(summary);
+      return;
+    }
+    setLedPending(true);
+    setLedNote("Sending trails…");
+    void sendLoadBalanceTrail(controlUrl, primary.hops, secondary.hops, summary).then((result) => {
+      if (run !== ticket.current) return;
+      setLedPending(false);
+      setLedNote(result.summary);
+      setLast({ url: result.url, mode: "real", at: Date.now() });
+    });
+  }
+
+  function applyBalance(src: NodeId, dest: NodeId) {
+    const partner = backupServer(dest);
+    setDestination(dest);
+    if (!partner || partner === src) {
+      setPartnerRoute(null);
+      setServerRoute(null);
+      setLedNote(
+        partner === src
+          ? `${NODES[partner].l} is the source. Pick another destination.`
+          : "Pick Server13, Server11, Server14, or Server12.",
+      );
+      return;
+    }
+    const primary = routeBetween(src, dest);
+    const secondary = routeBetween(src, partner);
+    setServerRoute(primary);
+    setPartnerRoute(secondary);
+    if (!primary || !secondary) {
+      setLedNote("No path remains inside the site.");
+      return;
+    }
+    sendBalancePaths(primary, secondary);
+  }
+
+  function pickBalance(id: NodeId) {
+    if (!source || destination) {
+      setSource(id);
+      setDestination(null);
+      setServerRoute(null);
+      setPartnerRoute(null);
+      setLedNote(`Source ${NODES[id].l}. Pick Server13, Server11, Server14, or Server12.`);
+      return;
+    }
+    if (id === source) {
+      setSource(null);
+      setServerRoute(null);
+      setPartnerRoute(null);
+      setLedNote("Pick a source, then Server13, Server11, Server14, or Server12.");
+      return;
+    }
+    if (!backupServer(id)) return;
+    applyBalance(source, id);
   }
 
   function applyDisaster(src: NodeId, dest: NodeId, down: string[]) {
@@ -380,6 +470,17 @@ export default function TopologyPage() {
                   onPick: pickDisasterNode,
                   onToggleLink: toggleDisasterLink,
                 }}
+                balance={{
+                  active: balanceOn,
+                  source,
+                  destination,
+                  partner: balanceOn && destination ? backupServer(destination) : null,
+                  path: serverRoute?.nodes ?? null,
+                  partnerPath: partnerRoute?.nodes ?? null,
+                  label: serverRoute?.label ?? null,
+                  partnerLabel: partnerRoute?.label ?? null,
+                  onPick: pickBalance,
+                }}
               />
               <div className="absolute top-4 right-4 text-right pointer-events-none">
                 <p className="font-code-sm text-xs text-on-surface-variant">SERIAL: BDC-NET-CORE</p>
@@ -408,9 +509,9 @@ export default function TopologyPage() {
 
               <div className="grid grid-cols-1 gap-3">
                 {MODES.map((m) => {
-                  const scenario = routingOn ? 1 : failoverOn ? 3 : disasterOn ? 5 : null;
-                  const locked = scenario !== null ? m.value !== scenario : (pending || ledPending) && m.value !== 1 && m.value !== 3 && m.value !== 5;
-                  const selected = m.value === 1 ? routingOn : m.value === 3 ? failoverOn : m.value === 5 ? disasterOn : mode === m.value && scenario === null;
+                  const scenario = routingOn ? 1 : failoverOn ? 3 : balanceOn ? 4 : disasterOn ? 5 : null;
+                  const locked = scenario !== null ? m.value !== scenario : (pending || ledPending) && m.value !== 1 && m.value !== 3 && m.value !== 4 && m.value !== 5;
+                  const selected = m.value === 1 ? routingOn : m.value === 3 ? failoverOn : m.value === 4 ? balanceOn : m.value === 5 ? disasterOn : mode === m.value && scenario === null;
                   return (
                   <button
                     key={m.value}
@@ -424,6 +525,11 @@ export default function TopologyPage() {
                       if (m.value === 3) {
                         if (failoverOn) stopFailover();
                         else startFailover();
+                        return;
+                      }
+                      if (m.value === 4) {
+                        if (balanceOn) stopBalance();
+                        else startBalance();
                         return;
                       }
                       if (m.value === 5) {
@@ -441,6 +547,7 @@ export default function TopologyPage() {
                     }
                     ${m.value === 1 && routingOn ? "shadow-[0_0_18px_rgba(34,211,238,0.45)]" : ""}
                     ${m.value === 3 && failoverOn ? "shadow-[0_0_18px_rgba(248,113,113,0.45)]" : ""}
+                    ${m.value === 4 && balanceOn ? "shadow-[0_0_18px_rgba(192,132,252,0.45)]" : ""}
                     ${m.value === 5 && disasterOn ? "shadow-[0_0_18px_rgba(248,113,113,0.45)]" : ""}`}
                   >
                     <span className="material-symbols-outlined">{m.icon}</span>
@@ -504,6 +611,31 @@ export default function TopologyPage() {
                 </div>
               )}
 
+              {balanceOn && (
+                <div className="rounded border border-violet-300/40 bg-violet-400/5 px-3 py-3">
+                  <p className="font-code-sm text-[11px] uppercase tracking-[0.22em] text-violet-300">load balance</p>
+                  <p className="mt-1 font-code-sm text-[10px] uppercase text-on-surface-variant">
+                    Server13 ↔ Server11 · Server14 ↔ Server12
+                  </p>
+                  {serverRoute && partnerRoute ? (
+                    <>
+                      <p className="mt-1 font-mono text-sm text-red-300 break-all">{serverRoute.label}</p>
+                      <p className="mt-1 font-mono text-sm text-blue-300 break-all">{partnerRoute.label}</p>
+                      <p className="mt-1 font-code-sm text-[10px] uppercase text-on-surface-variant">
+                        {NODES[serverRoute.nodes[0]].l} → {NODES[destination ?? serverRoute.nodes.at(-1)!].l} and {NODES[partnerRoute.nodes.at(-1)!].l}
+                      </p>
+                    </>
+                  ) : (
+                    <p className="mt-1 font-code-sm text-[10px] uppercase text-on-surface-variant">
+                      {source
+                        ? `${NODES[source].l} is the source. Pick Server13, Server11, Server14, or Server12.`
+                        : "Pick a source, then one of the paired servers."}
+                    </p>
+                  )}
+                  <p className="mt-2 font-code-sm text-[10px] uppercase text-on-surface-variant">Click Load Balance again to stop.</p>
+                </div>
+              )}
+
               {disasterOn && (
                 <div className="rounded border border-red-400/40 bg-red-400/5 px-3 py-3">
                   <p className="font-code-sm text-[11px] uppercase tracking-[0.22em] text-red-300">disaster</p>
@@ -537,7 +669,7 @@ export default function TopologyPage() {
               )}
 
               <button
-                disabled={routingOn || failoverOn || disasterOn || pending || ledPending}
+                disabled={routingOn || failoverOn || balanceOn || disasterOn || pending || ledPending}
                 onClick={testTrail}
                 className="flex items-center gap-3 py-3 px-4 rounded border border-dashed border-primary/50 text-primary uppercase tracking-wider font-headline-md hover:bg-primary/10 disabled:opacity-50"
               >

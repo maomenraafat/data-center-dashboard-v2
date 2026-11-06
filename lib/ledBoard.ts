@@ -160,12 +160,32 @@ export async function sendDisasterTrail(
     speed: 20,
   };
   if (cutLink) {
-    body.solid = { strip: cutLink, color: "#FF0000", autoOff: false };
+    body.solid = { strip: cutLink, color: "#FF0000", autoOff: true };
   }
   try {
     await callBoard(ip, "POST", "/api/v2/trail", body);
     const solid = cutLink ? ` · solid ${cutLink}` : "";
     return { ok: true, url, summary: `Trail sent: ${label}${solid}` };
+  } catch (error) {
+    return { ok: false, url, summary: (error as Error).message };
+  }
+}
+
+/** Two comets at once. trail1 is the chosen server, trail2 is its backup. */
+export async function sendLoadBalanceTrail(
+  ip: string,
+  primary: { code: string; reverse: boolean }[],
+  secondary: { code: string; reverse: boolean }[],
+  label: string,
+): Promise<LedResult> {
+  const url = `${new URL(normalizeUrl(ip)).origin}/api/v3/trail`;
+  const body = {
+    trail1: { path: trailPath(primary), color: "#FF0000", speed: 30, length: 8, fade: true },
+    trail2: { path: trailPath(secondary), color: "#0000FF", speed: 30, length: 8, fade: true },
+  };
+  try {
+    await callBoard(ip, "POST", "/api/v3/trail", body);
+    return { ok: true, url, summary: `Load balance sent: ${label}` };
   } catch (error) {
     return { ok: false, url, summary: (error as Error).message };
   }
